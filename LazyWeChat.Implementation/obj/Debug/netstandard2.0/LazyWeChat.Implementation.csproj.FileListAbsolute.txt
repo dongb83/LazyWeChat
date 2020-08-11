@@ -1,0 +1,16 @@
+C:\Bo.Dong\project\lazy\LazyWeChat\LazyWeChat\LazyWeChat.Implementation\obj\Debug\netstandard2.0\LazyWeChat.Implementation.AssemblyInfoInputs.cache
+C:\Bo.Dong\project\lazy\LazyWeChat\LazyWeChat\LazyWeChat.Implementation\obj\Debug\netstandard2.0\LazyWeChat.Implementation.AssemblyInfo.cs
+C:\Bo.Dong\project\lazy\LazyWeChat\LazyWeChat\LazyWeChat.Implementation\obj\Debug\netstandard2.0\LazyWeChat.Implementation.csproj.CoreCompileInputs.cache
+C:\Bo.Dong\project\lazy\LazyWeChat\LazyWeChat\LazyWeChat.Implementation\bin\Debug\netstandard2.0\LazyWeChat.Implementation.deps.json
+C:\Bo.Dong\project\lazy\LazyWeChat\LazyWeChat\LazyWeChat.Implementation\bin\Debug\netstandard2.0\LazyWeChat.Implementation.dll
+C:\Bo.Dong\project\lazy\LazyWeChat\LazyWeChat\LazyWeChat.Implementation\bin\Debug\netstandard2.0\LazyWeChat.Implementation.pdb
+C:\Bo.Dong\project\lazy\LazyWeChat\LazyWeChat\LazyWeChat.Implementation\bin\Debug\netstandard2.0\LazyWeChat.Abstract.dll
+C:\Bo.Dong\project\lazy\LazyWeChat\LazyWeChat\LazyWeChat.Implementation\bin\Debug\netstandard2.0\LazyWeChat.Models.dll
+C:\Bo.Dong\project\lazy\LazyWeChat\LazyWeChat\LazyWeChat.Implementation\bin\Debug\netstandard2.0\LazyWeChat.Utility.dll
+C:\Bo.Dong\project\lazy\LazyWeChat\LazyWeChat\LazyWeChat.Implementation\bin\Debug\netstandard2.0\LazyWeChat.Abstract.pdb
+C:\Bo.Dong\project\lazy\LazyWeChat\LazyWeChat\LazyWeChat.Implementation\bin\Debug\netstandard2.0\LazyWeChat.Utility.pdb
+C:\Bo.Dong\project\lazy\LazyWeChat\LazyWeChat\LazyWeChat.Implementation\bin\Debug\netstandard2.0\LazyWeChat.Models.pdb
+C:\Bo.Dong\project\lazy\LazyWeChat\LazyWeChat\LazyWeChat.Implementation\obj\Debug\netstandard2.0\LazyWeChat.Implementation.csprojAssemblyReference.cache
+C:\Bo.Dong\project\lazy\LazyWeChat\LazyWeChat\LazyWeChat.Implementation\obj\Debug\netstandard2.0\LazyWeChat.Implementation.csproj.CopyComplete
+C:\Bo.Dong\project\lazy\LazyWeChat\LazyWeChat\LazyWeChat.Implementation\obj\Debug\netstandard2.0\LazyWeChat.Implementation.dll
+C:\Bo.Dong\project\lazy\LazyWeChat\LazyWeChat\LazyWeChat.Implementation\obj\Debug\netstandard2.0\LazyWeChat.Implementation.pdb
