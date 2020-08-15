@@ -2,14 +2,9 @@
 using LazyWeChat.Abstract.MiniProgram;
 using LazyWeChat.Abstract.OfficialAccount;
 using LazyWeChat.Models;
-using LazyWeChat.Models.MiniProgram;
-using LazyWeChat.Utility;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
-using System.Dynamic;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
@@ -34,17 +29,20 @@ namespace LazyWeChat.Implementation.MiniProgram
         private readonly IOptions<LazyWeChatConfiguration> _options;
         private readonly IHttpRepository _httpRepository;
         private readonly ILazyWeChatBasic _lazyWeChatBasic;
+        private readonly ILazyMaterials _lazyMaterials;
         private readonly ILogger<LazyMiniBasic> _logger;
 
         public LazyMiniBasic(
             IOptions<LazyWeChatConfiguration> options,
             IHttpRepository httpRepository,
             ILazyWeChatBasic lazyWeChatBasic,
+            ILazyMaterials lazyMaterials,
             ILogger<LazyMiniBasic> logger)
         {
             _options = options;
             _httpRepository = httpRepository;
             _lazyWeChatBasic = lazyWeChatBasic;
+            _lazyMaterials = lazyMaterials;
             _logger = logger;
         }
 
@@ -55,33 +53,6 @@ namespace LazyWeChat.Implementation.MiniProgram
         }
 
         public async Task<string> GetAccessTokenAsync() => await _lazyWeChatBasic.GetAccessTokenAsync();
-
-        public async Task<byte[]> GetTempMediaAsync(string media_id)
-        {
-            var access_token = await GetAccessTokenAsync();
-            var url = string.Format(CONSTANT.GETTEMPMEDIAURL, access_token, media_id);
-            var res = await _httpRepository.GetAsync(url);
-            byte[] byteArray = Encoding.Default.GetBytes(res);
-            return byteArray;
-        }
-
-        public async Task<dynamic> SendKFMessage(MiniKFMessage message)
-        {
-            var access_token = await GetAccessTokenAsync();
-            var url = string.Format(CONSTANT.SENDKFMESSAGEURL, access_token);
-            var requestContent = JsonConvert.SerializeObject(message);
-            var res = await _httpRepository.PostParseAsync(url, requestContent);
-            return res;
-        }
-
-        public async Task<dynamic> SendUniformMessage(UniformMessage message)
-        {
-            var access_token = await GetAccessTokenAsync();
-            var url = string.Format(CONSTANT.UNIFORMMESSAGEURL, access_token);
-            var requestContent = JsonConvert.SerializeObject(message);
-            var res = await _httpRepository.PostParseAsync(url, requestContent);
-            return res;
-        }
 
         /// <summary>
         /// 根据微信小程序平台提供的解密算法解密数据
@@ -115,27 +86,6 @@ namespace LazyWeChat.Implementation.MiniProgram
             string result = Encoding.UTF8.GetString(final);
 
             return result;
-        }
-
-
-        private dynamic GenerateTemplateModel(string touser, string template_id, (string, string, string)[] data)
-        {
-            dynamic requestObject = new ExpandoObject();
-            requestObject.touser = touser;
-            requestObject.template_id = template_id;
-            requestObject.data = new ExpandoObject();
-            SortedDictionary<string, dynamic> dict = new SortedDictionary<string, dynamic>();
-            for (int i = 0; i < data.Length; i++)
-            {
-                dynamic item = new ExpandoObject();
-                item.value = data[i].Item2;
-                if (!string.IsNullOrEmpty(data[i].Item3))
-                    item.color = data[i].Item3;
-                dict.Add(data[i].Item1, item);
-            }
-            var json = JsonConvert.SerializeObject(dict);
-            requestObject.data = UtilRepository.ParseAPIResult(json);
-            return requestObject;
         }
     }
 }

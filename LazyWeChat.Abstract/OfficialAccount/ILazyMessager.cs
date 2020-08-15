@@ -1,8 +1,4 @@
-﻿using LazyWeChat.Models;
-using LazyWeChat.Models.OfficialAccount;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using LazyWeChat.Models.OfficialAccount;
 using System.Threading.Tasks;
 
 namespace LazyWeChat.Abstract.OfficialAccount

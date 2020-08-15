@@ -26,6 +26,7 @@ namespace LazyWeChat.MiniProgram
             var items = new List<(Type, string, ServiceLifetime)>();
             items.Add((typeof(IHttpRepository), Constant.IHTTPREPOSITORYIMPELEMENTATION, ServiceLifetime.Transient));
             items.Add((typeof(ILazyWeChatBasic), LazyWeChatServiceCollectionExtension.ILAZYWECHATBASICIMPELEMENTATION, ServiceLifetime.Singleton));
+            items.Add((typeof(ILazyMaterials), LazyWeChatServiceCollectionExtension.ILAZYMATERIALSIMPELEMENTATION, ServiceLifetime.Transient));
             items.Add((typeof(ILazyMiniBasic), ILAZYMINIBASICIMPELEMENTATION, ServiceLifetime.Transient));
 
             return services.RegisterServices(LazyWeChatServiceCollectionExtension.LAZYWXSECTIONNAME, configure, items);

@@ -2,7 +2,6 @@
 using LazyWeChat.Models.Exception;
 using LazyWeChat.Utility;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using System;
 using System.Dynamic;
 using System.IO;
@@ -46,7 +45,7 @@ namespace LazyWeChat.Implementation
             {
                 using (HttpContent httpContent = new StringContent(requestContent))
                 {
-                    httpContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");//text/xml
+                    httpContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
 
                     var response = await client.PostAsync(url, httpContent);
 
@@ -175,6 +174,18 @@ namespace LazyWeChat.Implementation
         public async Task<string> UploadFile(string requestUrl, string fileName)
         {
             var result = await Task<string>.Run(() => HttpRequestRepository.HttpUploadFile(requestUrl, fileName));
+            return result;
+        }
+
+        public async Task<string> UploadFile(string requestUrl, string fileName, string formName)
+        {
+            var result = await Task<string>.Run(() => HttpRequestRepository.HttpUploadFile(requestUrl, fileName, formName));
+            return result;
+        }
+
+        public async Task<string> UploadFile(string requestUrl, string fileName, string formName, string additionInfo)
+        {
+            var result = await Task<string>.Run(() => HttpRequestRepository.HttpUploadFile(requestUrl, fileName, formName, additionInfo));
             return result;
         }
     }

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace LazyWeChat.Models.MiniProgram
+﻿namespace LazyWeChat.Models.MiniProgram
 {
     public enum MiniMessageType
     {

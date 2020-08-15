@@ -6,9 +6,7 @@ using LazyWeChat.Utility;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 using System;
-using System.Collections.Generic;
 using System.Dynamic;
-using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -103,7 +101,7 @@ namespace LazyWeChat.Implementation.WeChatPay.V2
                 .ToString();
         }
 
-        public string GetPrePayUrl(string out_trade_no)
+        private string GetPrePayUrl(string out_trade_no)
         {
             NativePayModel model = new NativePayModel(_options.Value);
             model.product_id = out_trade_no;

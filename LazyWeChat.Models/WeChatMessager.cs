@@ -1,10 +1,7 @@
 ﻿using LazyWeChat.Utility;
-using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Text;
-using System.Threading;
 
 namespace LazyWeChat.Models
 {

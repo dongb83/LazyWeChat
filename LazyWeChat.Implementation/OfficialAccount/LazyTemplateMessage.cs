@@ -1,11 +1,9 @@
 ﻿using LazyWeChat.Abstract.OfficialAccount;
 using LazyWeChat.Utility;
 using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
 using System.Dynamic;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace LazyWeChat.Implementation.OfficialAccount

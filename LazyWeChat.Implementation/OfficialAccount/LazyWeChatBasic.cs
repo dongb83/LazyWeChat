@@ -6,7 +6,6 @@ using LazyWeChat.Utility;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Dynamic;
@@ -168,8 +167,11 @@ namespace LazyWeChat.Implementation.OfficialAccount
         #endregion
 
         #region Account Management
-        async Task<dynamic> GenerateQRCodeTicketAsync<T>(bool tempOrNot, int expire_seconds, T scene_value) where T : struct
+        async Task<dynamic> GenerateQRCodeTicketAsync<T>(bool tempOrNot, int expire_seconds, T scene_value)
         {
+            if (!(typeof(T) == typeof(int)|| typeof(T) == typeof(string)))
+                throw new InvalidCastException(nameof(scene_value));
+
             dynamic requestObject = new ExpandoObject();
             if (tempOrNot)
             {
@@ -191,7 +193,7 @@ namespace LazyWeChat.Implementation.OfficialAccount
             return returnObject;
         }
 
-        public async Task<string> GenerateQRCodeAsync<T>(bool tempOrNot, int expire_seconds, T scene_value) where T : struct
+        public async Task<string> GenerateQRCodeAsync<T>(bool tempOrNot, int expire_seconds, T scene_value)
         {
             var ticketObject = await GenerateQRCodeTicketAsync(tempOrNot, expire_seconds, scene_value);
 
@@ -207,7 +209,7 @@ namespace LazyWeChat.Implementation.OfficialAccount
             requestObject.long_url = long_url;
             requestObject.action = "long2short";
 
-            var returnObject = await SendRequest(requestObject, CONSTANT.GENERATEQRCODETICKETURL, HttpMethod.Post, "short_url");
+            var returnObject = await SendRequest(requestObject, CONSTANT.SHORTURL, HttpMethod.Post, "short_url");
             return returnObject.short_url;
         }
 

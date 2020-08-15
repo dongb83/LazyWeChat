@@ -22,8 +22,10 @@ namespace LazyWeChat.Abstract
 
         void Validate(dynamic returnObj, params string[] validationNames);
 
-        Task<string> UploadFile(string requestUrl, byte[] file, string fileName);
-
         Task<string> UploadFile(string requestUrl, string fileName);
+
+        Task<string> UploadFile(string requestUrl, string fileName, string formName);
+
+        Task<string> UploadFile(string requestUrl, string fileName, string formName, string additionInfo);
     }
 }

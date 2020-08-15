@@ -1,12 +1,8 @@
 ﻿using LazyWeChat.Abstract.OfficialAccount;
-using LazyWeChat.Utility;
 using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
 using System.Dynamic;
 using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace LazyWeChat.Implementation.OfficialAccount
@@ -33,14 +29,15 @@ namespace LazyWeChat.Implementation.OfficialAccount
 
         public const string GETUSERDETAILSURL = "https://api.weixin.qq.com/cgi-bin/user/info?access_token={0}&openid={1}&lang={2}";
 
+        public const string GETUSERSDETAILSURL = "https://api.weixin.qq.com/cgi-bin/user/info/batchget?access_token={0}";
+
         public const string GETUSERLISTURL = "https://api.weixin.qq.com/cgi-bin/user/get?access_token={0}&next_openid={1}";
 
         public const string GETBLACKLISTURL = "https://api.weixin.qq.com/cgi-bin/tags/members/getblacklist?access_token={0}";
 
-        public const string BATCHBLACKLISTURL = "https://api.weixin.qq.com/cgi-bin/tags/members/batchunblacklist?access_token={0}";
+        public const string BATCHBLACKLISTURL = "https://api.weixin.qq.com/cgi-bin/tags/members/batchblacklist?access_token={0}";
 
-
-        public const string BATCHUNBLACKLISTURL = "https://api.weixin.qq.com/cgi-bin/tags/members/batchunblacklist?access_token={0}"; 
+        public const string BATCHUNBLACKLISTURL = "https://api.weixin.qq.com/cgi-bin/tags/members/batchunblacklist?access_token={0}";
     }
 
     public partial class LazyWeChatBasic : ILazyWeChatBasic
@@ -88,7 +85,7 @@ namespace LazyWeChat.Implementation.OfficialAccount
             requestObject.tagid = tagId;
             requestObject.next_openid = next_openid;
 
-            var returnObject = await SendRequest(requestObject, CONSTANT.GETTAGUSERSURL, HttpMethod.Post);
+            var returnObject = await SendRequest(requestObject, CONSTANT.GETTAGUSERSURL, HttpMethod.Post, "data");
             return returnObject;
         }
 
@@ -137,6 +134,24 @@ namespace LazyWeChat.Implementation.OfficialAccount
             string requestUrl = string.Format(CONSTANT.GETUSERDETAILSURL, access_token, openid, lang);
 
             var returnObject = await _httpRepository.GetParseValidateAsync(requestUrl, "nickname");
+            return returnObject;
+        }
+
+        public async Task<dynamic> GetUsersDetailsAsync(List<(string, string)> user_list)
+        {
+            var access_token = await GetAccessTokenAsync();
+            string requestUrl = string.Format(CONSTANT.GETUSERSDETAILSURL, access_token);
+            dynamic requestObject = new ExpandoObject();
+            var list = new List<dynamic>();
+            user_list.ForEach(i =>
+            {
+                var item = new { openid = i.Item1, lang = i.Item2 };
+                list.Add(item);
+            });
+            requestObject.user_list = list;
+            var requestContent = JsonConvert.SerializeObject(requestObject);
+
+            var returnObject = await _httpRepository.PostParseValidateAsync(requestUrl, requestContent, "user_info_list");
             return returnObject;
         }
 

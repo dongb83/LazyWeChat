@@ -1,9 +1,7 @@
 ﻿using LazyWeChat.Abstract;
-using LazyWeChat.Abstract.OfficialAccount;
 using LazyWeChat.Models;
 using LazyWeChat.Utility;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
@@ -12,11 +10,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Dynamic;
 using System.IO;
-using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
-using System.Xml;
 
 namespace LazyWeChat.OfficialAccount
 {
