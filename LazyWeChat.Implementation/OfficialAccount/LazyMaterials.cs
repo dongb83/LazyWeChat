@@ -228,7 +228,7 @@ namespace LazyWeChat.Implementation.OfficialAccount
 
         public async Task<dynamic> GetMaterialsCountAsync()
         {
-            var returnObject = await _httpRepository.PostParseValidateAsync(CONSTANT.GETMATERTIALCOUNTURL, "",
+            var returnObject = await SendRequest("", CONSTANT.GETMATERTIALCOUNTURL, HttpMethod.Get,
                 "voice_count", "video_count", "image_count", "news_count");
             return returnObject;
         }

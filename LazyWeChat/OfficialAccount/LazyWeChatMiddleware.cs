@@ -101,7 +101,6 @@ namespace LazyWeChat.OfficialAccount
                 var message = weChatMessager.message;
 
                 if (encrypted && message.ToLower() != "success")
-                //if(false)
                 {
                     var encryptMessage = Cryptography.AES_encrypt(weChatMessager.message, _options.Value.EncodingAESKey, _options.Value.AppID);
                     var signatureResponse = generateSignature(timestamp, nonce, encryptMessage);

@@ -160,25 +160,54 @@ namespace LazyWeChat.Models
     public class WeChatMessager
     {
         private string _message = "";
-
+        /// <summary>
+        /// 微信服务的类型(在配置文件中指定)
+        /// </summary>
         public APIType type { get; set; }
 
+        /// <summary>
+        /// HTTP请求类型
+        /// </summary>
         public string method { get; set; }
 
+        /// <summary>
+        /// 微信传递的signature
+        /// </summary>
         public string signature { get; set; }
 
+        /// <summary>
+        /// 微信传递的timestamp
+        /// </summary>
         public string timestamp { get; set; }
 
+        /// <summary>
+        /// 微信传递的nonce
+        /// </summary>
         public string nonce { get; set; }
 
+        /// <summary>
+        /// 微信传递的echostr
+        /// </summary>
         public string echostr { get; set; }
 
+        /// <summary>
+        /// 是否为微信服务器传递的消息
+        /// </summary>
         public bool validation { get; set; }
 
+        /// <summary>
+        /// 消息内容的dynamic形式
+        /// </summary>
         public dynamic messageBody { get; set; }
 
+        /// <summary>
+        /// 消息格式
+        /// </summary>
         public MessageFormat format { get; set; }
 
+        /// <summary>
+        /// 消息内容的文本形式
+        /// </summary>
         public string message
         {
             get
@@ -340,6 +369,10 @@ namespace LazyWeChat.Models
             };
         }
 
+        /// <summary>
+        /// 关注事件
+        /// </summary>
+        /// <param name="action"></param>
         public void onSubscribeEvent(Action<string, string> action)
         {
             if (messageBody.MsgType == "event")
@@ -354,6 +387,10 @@ namespace LazyWeChat.Models
             }
         }
 
+        /// <summary>
+        /// 取消关注事件
+        /// </summary>
+        /// <param name="action"></param>
         public void onUnsubscribeEvent(Action action)
         {
             if (messageBody.MsgType == "event")
@@ -365,6 +402,10 @@ namespace LazyWeChat.Models
             }
         }
 
+        /// <summary>
+        /// 扫描带参数二维码事件
+        /// </summary>
+        /// <param name="action"></param>
         public void onScanEvent(Action<string, string> action)
         {
             if (messageBody.MsgType == "event")
@@ -379,6 +420,10 @@ namespace LazyWeChat.Models
             }
         }
 
+        /// <summary>
+        /// 上报地理位置事件
+        /// </summary>
+        /// <param name="action"></param>
         public void onLocationEvent(Action<decimal, decimal, decimal> action)
         {
             if (messageBody.MsgType == "event")
@@ -394,6 +439,10 @@ namespace LazyWeChat.Models
             }
         }
 
+        /// <summary>
+        /// 点击自定义菜单拉取消息时的事件推送
+        /// </summary>
+        /// <param name="action"></param>
         public void onMenuClickEvent(Action<string> action)
         {
             if (messageBody.MsgType == "event")
@@ -407,16 +456,37 @@ namespace LazyWeChat.Models
             }
         }
 
+        /// <summary>
+        /// 点击自定义菜单跳转链接时的事件推送
+        /// </summary>
+        /// <param name="action"></param>
         public void onMenuViewEvent(Action<string, string> action)
         {
             if (messageBody.MsgType == "event")
             {
-                if (messageBody.Event == "CLICK")
+                if (messageBody.Event == "VIEW")
                 {
                     var eventKey = UtilRepository.IsPropertyExist(messageBody, "EventKey") ? messageBody.EventKey : "";
                     var menuId = UtilRepository.IsPropertyExist(messageBody, "MenuId") ? messageBody.MenuId : "";
 
                     action(eventKey, menuId);
+                }
+            }
+        }
+
+        /// <summary>
+        /// 模板消息发送后的推送事件
+        /// </summary>
+        /// <param name="action"></param>
+        public void onTemplateMessageSentEvent(Action<string, string> action)
+        {
+            if (messageBody.MsgType == "event")
+            {
+                if (messageBody.Event == "TEMPLATESENDJOBFINISH")
+                {
+                    var msgID = UtilRepository.IsPropertyExist(messageBody, "MsgID") ? messageBody.MsgID : "";
+                    var status = UtilRepository.IsPropertyExist(messageBody, "Status") ? messageBody.Status : "";
+                    action(msgID, status);
                 }
             }
         }

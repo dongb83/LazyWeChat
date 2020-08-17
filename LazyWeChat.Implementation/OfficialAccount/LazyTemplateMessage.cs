@@ -87,7 +87,7 @@ namespace LazyWeChat.Implementation.OfficialAccount
             dynamic requestObject = GenerateTemplateModel(touser, template_id, data);
             requestObject.miniprogram = new ExpandoObject();
             requestObject.miniprogram.appid = appid;
-            requestObject.miniprogram.pagepath = pagepath;
+            requestObject.miniprogram.page = pagepath;
 
             var returnObject = await SendRequest(requestObject, CONSTANT.SENDTEMPLATEMESSAGEURL, HttpMethod.Post, "msgid");
             return returnObject;
