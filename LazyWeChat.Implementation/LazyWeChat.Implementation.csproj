@@ -1,6 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<TargetFramework>netstandard2.0</TargetFramework>
+		<SignAssembly>true</SignAssembly>
+		<AssemblyOriginatorKeyFile>LazyWeChat.pfx</AssemblyOriginatorKeyFile>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -11,6 +13,7 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\LazyWeChat.Abstract\LazyWeChat.Abstract.csproj" />
+		<ProjectReference Include="..\LazyWeChat.Models\LazyWeChat.Models.csproj" />
 		<ProjectReference Include="..\LazyWeChat.Utility\LazyWeChat.Utility.csproj" />
 	</ItemGroup>
 </Project>

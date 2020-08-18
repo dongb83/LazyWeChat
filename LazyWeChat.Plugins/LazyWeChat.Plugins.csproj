@@ -2,11 +2,12 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>LazyWeChat.pfx</AssemblyOriginatorKeyFile>
   </PropertyGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\LazyWeChat.Abstract\LazyWeChat.Abstract.csproj" />
-    <ProjectReference Include="..\LazyWeChat.Utility\LazyWeChat.Utility.csproj" />
   </ItemGroup>
 
 </Project>
