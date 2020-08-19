@@ -11,8 +11,6 @@
     public class MiniKFMessage
     {
         public string touser { get; set; }
-
-        public string msgtype { get; set; }
     }
 
     public class MiniKFTextMessage : MiniKFMessage
@@ -21,9 +19,10 @@
 
         public MiniKFTextMessage()
         {
-            msgtype = MiniMessageType.text.ToString();
             message = new TextMessage();
         }
+
+        public string msgtype { get => MiniMessageType.text.ToString(); }
 
         public TextMessage text { get => message; set => message = value; }
 
@@ -39,9 +38,9 @@
 
         public MiniKFImageMessage()
         {
-            msgtype = MiniMessageType.image.ToString();
             message = new ImageMessage();
         }
+        public string msgtype { get => MiniMessageType.image.ToString(); }
 
         public ImageMessage image { get => message; set => message = value; }
 
@@ -57,9 +56,9 @@
 
         public MiniKFLinkMessage()
         {
-            msgtype = MiniMessageType.link.ToString();
             link = new LinkMessage();
         }
+        public string msgtype { get => MiniMessageType.link.ToString(); }
 
         public LinkMessage link { get => message; set => message = value; }
 
@@ -81,9 +80,9 @@
 
         public MiniKFMiniMessage()
         {
-            msgtype = MiniMessageType.miniprogrampage.ToString();
             miniprogrampage = new MiniMessage();
         }
+        public string msgtype { get => MiniMessageType.miniprogrampage.ToString(); }
 
         public MiniMessage miniprogrampage { get => message; set => message = value; }
 

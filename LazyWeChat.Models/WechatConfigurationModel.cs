@@ -38,5 +38,7 @@ namespace LazyWeChat.Models
 
         public string NativeNotifyListener { get => "NativeNotifyListener"; }
 
+        public string MQConnectionString { get; set; }
+
     }
 }

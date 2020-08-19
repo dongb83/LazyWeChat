@@ -57,7 +57,7 @@ namespace LazyWeChat
 
         public static IApplicationBuilder UseLazyNativePay<T>(
             this IApplicationBuilder app,
-            Func<string/*test*/, (string, int)> _onGetProductInfo) where T : IMessageQueue
+            Func<string, (string, int)> _onGetProductInfo) where T : IMessageQueue
         {
             if (_onGetProductInfo == null)
                 throw new ArgumentNullException(nameof(_onGetProductInfo));

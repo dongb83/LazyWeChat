@@ -122,5 +122,16 @@ namespace LazyWeChat.Utility
         {
             return Convert.ToInt64((DateTime.Now - DateTime.Parse("1970-1-1")).TotalMilliseconds);
         }
+
+        public static string GenerateRandomCode(int length = 10)
+        {
+            var result = new StringBuilder();
+            for (var i = 0; i < length; i++)
+            {
+                var r = new Random(Guid.NewGuid().GetHashCode());
+                result.Append(r.Next(0, 10));
+            }
+            return result.ToString();
+        }
     }
 }

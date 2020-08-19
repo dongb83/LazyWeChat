@@ -1,13 +1,16 @@
 ﻿using LazyWeChat.Abstract;
 using LazyWeChat.Models.Exception;
 using LazyWeChat.Utility;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System;
 using System.Dynamic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace LazyWeChat.Implementation
@@ -15,25 +18,45 @@ namespace LazyWeChat.Implementation
     public class HttpRepository : IHttpRepository
     {
         private readonly IHttpClientFactory _clientFactory;
+        private readonly ILogger<HttpRepository> _logger;
 
-        public HttpRepository(IHttpClientFactory clientFactory)
+        public HttpRepository(
+            IHttpClientFactory clientFactory,
+            ILogger<HttpRepository> logger)
         {
             _clientFactory = clientFactory;
+            _logger = logger;
         }
 
         public async Task<string> GetAsync(string url)
         {
+            dynamic resultObject = new ExpandoObject();
+            resultObject.requestID = UtilRepository.GenerateRandomCode();
+            resultObject.method = "GET";
+            resultObject.url = url;
+            resultObject.createdAt = DateTime.Now.ToString();
+            string json = "";
+
             using (var client = _clientFactory.CreateClient())
             {
                 var response = await client.GetAsync(url);
+                resultObject.statusCode = response.StatusCode;
 
                 if (response.IsSuccessStatusCode)
                 {
-                    var result = await response.Content.ReadAsStringAsync();
-                    return result;
+                    var content = await response.Content.ReadAsStringAsync();
+                    resultObject.result = "success";
+                    resultObject.resultContent = content;
+                    json = JsonConvert.SerializeObject(resultObject);
+                    _logger.LogInformation(json);
+                    return content;
                 }
                 else
                 {
+                    resultObject.result = "fail";
+                    resultObject.resultContent = "BadHttpResponseException";
+                    json = JsonConvert.SerializeObject(resultObject);
+                    _logger.LogInformation(json);
                     throw new BadHttpResponseException(url, response.StatusCode);
                 }
             }
@@ -41,6 +64,14 @@ namespace LazyWeChat.Implementation
 
         public async Task<string> PostAsync(string url, string requestContent)
         {
+            dynamic resultObject = new ExpandoObject();
+            resultObject.requestID = UtilRepository.GenerateRandomCode();
+            resultObject.method = "POST";
+            resultObject.url = url;
+            resultObject.requestContent = requestContent;
+            resultObject.createdAt = DateTime.Now.ToString();
+            string json = "";
+
             using (var client = _clientFactory.CreateClient())
             {
                 using (HttpContent httpContent = new StringContent(requestContent))
@@ -51,37 +82,37 @@ namespace LazyWeChat.Implementation
 
                     if (response.IsSuccessStatusCode)
                     {
-                        var result = await response.Content.ReadAsStringAsync();
-                        return result;
+                        var content = await response.Content.ReadAsStringAsync();
+                        resultObject.result = "success";
+                        resultObject.resultContent = content;
+                        json = JsonConvert.SerializeObject(resultObject);
+                        _logger.LogInformation(json);
+                        return content;
                     }
                     else
                     {
+                        resultObject.result = "fail";
+                        resultObject.resultContent = "BadHttpResponseException";
+                        json = JsonConvert.SerializeObject(resultObject);
+                        _logger.LogInformation(json);
                         throw new BadHttpResponseException(url, response.StatusCode);
                     }
                 }
             }
         }
 
-        public async Task<dynamic> GetParseAsync(string url)
+        public async Task<dynamic> GetParseAsync(string url) => Pasre(await GetAsync(url));
+
+        public async Task<dynamic> PostParseAsync(string url, string requestContent) => Pasre(await PostAsync(url, requestContent));
+
+        private dynamic Pasre(string content)
         {
-            var content = await GetAsync(url);
             dynamic returnObject = new ExpandoObject();
             if (content.StartsWith("{") && content.EndsWith("}"))
                 returnObject = UtilRepository.ParseAPIResult(content);
             else
                 returnObject = content.FromXml().ToDynamic();
 
-            return returnObject;
-        }
-
-        public async Task<dynamic> PostParseAsync(string url, string requestContent)
-        {
-            var content = await PostAsync(url, requestContent);
-            dynamic returnObject = new ExpandoObject();
-            if (content.StartsWith("{") && content.EndsWith("}"))
-                returnObject = UtilRepository.ParseAPIResult(content);
-            else
-                returnObject = content.FromXml().ToDynamic();
             return returnObject;
         }
 
@@ -143,7 +174,7 @@ namespace LazyWeChat.Implementation
             return expandoObject;
         }
 
-        public async Task<string> UploadFile(string url, byte[] file, string fileName)
+        private async Task<string> UploadFile(string url, byte[] file, string fileName)
         {
             using (var client = _clientFactory.CreateClient())
             {
@@ -171,22 +202,86 @@ namespace LazyWeChat.Implementation
             }
         }
 
-        public async Task<string> UploadFile(string requestUrl, string fileName)
-        {
-            var result = await Task<string>.Run(() => HttpRequestRepository.HttpUploadFile(requestUrl, fileName));
-            return result;
-        }
+        public async Task<string> UploadFile(string requestUrl, string fileName) => await Task<string>.Run(() => HttpUploadFile(requestUrl, fileName));
 
-        public async Task<string> UploadFile(string requestUrl, string fileName, string formName)
-        {
-            var result = await Task<string>.Run(() => HttpRequestRepository.HttpUploadFile(requestUrl, fileName, formName));
-            return result;
-        }
+        public async Task<string> UploadFile(string requestUrl, string fileName, string formName) => await Task<string>.Run(() => HttpUploadFile(requestUrl, fileName, formName));
 
-        public async Task<string> UploadFile(string requestUrl, string fileName, string formName, string additionInfo)
+        public async Task<string> UploadFile(string requestUrl, string fileName, string formName, string additionInfo) => await Task<string>.Run(() => HttpUploadFile(requestUrl, fileName, formName, additionInfo));
+
+        string HttpUploadFile(string url, string path, string formName = "file", string additionInfo = "")
         {
-            var result = await Task<string>.Run(() => HttpRequestRepository.HttpUploadFile(requestUrl, fileName, formName, additionInfo));
-            return result;
+            dynamic resultObject = new ExpandoObject();
+            resultObject.requestID = UtilRepository.GenerateRandomCode();
+            resultObject.method = "POST";
+            resultObject.url = url;
+            resultObject.requestContent = path;
+            resultObject.createdAt = DateTime.Now.ToString();
+
+            string content = "";
+
+            try
+            {
+                #region Upload
+                HttpWebRequest request = WebRequest.Create(url) as HttpWebRequest;
+                CookieContainer cookieContainer = new CookieContainer();
+                request.CookieContainer = cookieContainer;
+                request.AllowAutoRedirect = true;
+                request.Method = "POST";
+                string boundary = DateTime.Now.Ticks.ToString("X"); // 随机分隔线
+                request.ContentType = "multipart/form-data;charset=utf-8;boundary=" + boundary;
+                byte[] itemBoundaryBytes = Encoding.UTF8.GetBytes("\r\n--" + boundary + "\r\n");
+                byte[] endBoundaryBytes = Encoding.UTF8.GetBytes("\r\n--" + boundary + "--\r\n");
+
+                int pos = path.LastIndexOf("\\");
+                string fileName = path.Substring(pos + 1);
+
+                StringBuilder sbHeader = new StringBuilder(string.Format("Content-Disposition:form-data;name=\"" + formName + "\";filename=\"{0}\"\r\nContent-Type:application/octet-stream\r\n\r\n", fileName));
+                byte[] postHeaderBytes = Encoding.UTF8.GetBytes(sbHeader.ToString());
+
+                FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read);
+                byte[] bArr = new byte[fs.Length];
+                fs.Read(bArr, 0, bArr.Length);
+                fs.Close();
+
+                Stream postStream = request.GetRequestStream();
+                postStream.Write(itemBoundaryBytes, 0, itemBoundaryBytes.Length);
+                postStream.Write(postHeaderBytes, 0, postHeaderBytes.Length);
+                postStream.Write(bArr, 0, bArr.Length);
+                byte[] bSplit = Encoding.UTF8.GetBytes("--" + boundary + "\r\n");
+                postStream.Write(bSplit, 0, bSplit.Length);
+
+                if (!string.IsNullOrEmpty(additionInfo))
+                {
+                    byte[] additionBytes = Encoding.UTF8.GetBytes("Content-Disposition: form-data; name=\"description\";\r\n\r\n");
+                    postStream.Write(additionBytes, 0, additionBytes.Length);
+                    byte[] additionContentBytes = Encoding.UTF8.GetBytes(additionInfo);
+                    postStream.Write(additionContentBytes, 0, additionContentBytes.Length);
+                    postStream.Write(endBoundaryBytes, 0, endBoundaryBytes.Length);
+                }
+
+                postStream.Close();
+
+                HttpWebResponse response = request.GetResponse() as HttpWebResponse;
+                Stream instream = response.GetResponseStream();
+                StreamReader sr = new StreamReader(instream, Encoding.UTF8);
+                content = sr.ReadToEnd();
+                #endregion
+
+                resultObject.result = "success";
+                resultObject.resultContent = content;
+                string json = JsonConvert.SerializeObject(resultObject);
+                _logger.LogInformation(json);
+            }
+            catch (Exception ex)
+            {
+                resultObject.result = "fail";
+                resultObject.resultContent = ex.Message;
+                string json = JsonConvert.SerializeObject(resultObject);
+                _logger.LogInformation(json);
+                throw ex;
+            }
+
+            return content;
         }
     }
 }

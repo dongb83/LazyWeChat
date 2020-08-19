@@ -10,6 +10,15 @@ namespace LazyWeChat.Implementation
     public class DefaultMessageQueue : IMessageQueue
     {
         private ConcurrentQueue<string> queue = new ConcurrentQueue<string>();
+        public DefaultMessageQueue()
+        {
+
+        }
+
+        public DefaultMessageQueue(string connectionString)
+        {
+
+        }
 
         public async Task<string> Pop()
         {

@@ -27,7 +27,6 @@ namespace LazyWeChat.Implementation.MiniProgram
         public const string SUBSCRIBEMESSAGEURL = "https://api.weixin.qq.com/cgi-bin/message/subscribe/send?access_token={0}";
     }
 
-
     public partial class LazyMiniBasic : ILazyMiniBasic
     {
         async Task<dynamic> SendRequest(dynamic requestObject, string requestUrl, HttpMethod method, params string[] validationNames)

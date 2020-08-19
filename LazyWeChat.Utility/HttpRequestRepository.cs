@@ -5,7 +5,7 @@ using System.Text;
 
 namespace LazyWeChat.Utility
 {
-    public class HttpRequestRepository
+    internal class HttpRequestRepository
     {
         #region 发送 POST Request
         /// <summary>

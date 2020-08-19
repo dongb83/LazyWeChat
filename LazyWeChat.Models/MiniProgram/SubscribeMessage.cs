@@ -27,19 +27,40 @@ namespace LazyWeChat.Models.MiniProgram
             rawData = new Dictionary<string, string>();
         }
 
+        /// <summary>
+        /// 接受者openid
+        /// </summary>
         public string touser { get; set; }
 
+        /// <summary>
+        /// 所需下发的订阅模板id
+        /// </summary>
         public string template_id { get; set; }
 
+        /// <summary>
+        /// 点击模板卡片后的跳转页面
+        /// </summary>
         public string page { get; set; }
 
+        /// <summary>
+        /// 跳转小程序类型:developer为开发版,trial为体验版,formal为正式版,默认为正式版
+        /// </summary>
         public string miniprogram_state { get; set; }
 
+        /// <summary>
+        /// 进入小程序查看”的语言类型
+        /// </summary>
         public string lang { get; set; }
 
+        /// <summary>
+        /// 模板内容
+        /// </summary>
         [JsonIgnore]
         public Dictionary<string, string> rawData { get; set; }
 
+        /// <summary>
+        /// 模板内容的dynamic格式,用于序列化
+        /// </summary>
         public dynamic data
         {
             get

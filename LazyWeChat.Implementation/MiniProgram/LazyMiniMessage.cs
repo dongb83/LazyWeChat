@@ -13,10 +13,18 @@ namespace LazyWeChat.Implementation.MiniProgram
 {
     public partial class LazyMiniBasic : ILazyMiniBasic
     {
-        public async Task<dynamic> SendKFMessage(MiniKFMessage message) =>
+        public Task<dynamic> SendKFMessageAsync(MiniKFTextMessage message) => SendKFMessage(message);
+
+        public Task<dynamic> SendKFMessageAsync(MiniKFImageMessage message) => SendKFMessage(message);
+
+        public Task<dynamic> SendKFMessageAsync(MiniKFLinkMessage message) => SendKFMessage(message);
+
+        public Task<dynamic> SendKFMessageAsync(MiniKFMiniMessage message) => SendKFMessage(message);
+
+        private async Task<dynamic> SendKFMessage(MiniKFMessage message) =>
             await SendRequest(message, CONSTANT.SENDKFMESSAGEURL, HttpMethod.Post);
 
-        public async Task<dynamic> SendUniformMessage(UniformMessage message) =>
+        public async Task<dynamic> SendUniformMessageAsync(MPUniformMessage message) =>
             await SendRequest(message, CONSTANT.UNIFORMMESSAGEURL, HttpMethod.Post);
 
         public async Task<dynamic> UploadTempMediaAsync(string fullFilePath) => await _lazyMaterials.UploadTempMaterialAsync(fullFilePath, MediaType.image);

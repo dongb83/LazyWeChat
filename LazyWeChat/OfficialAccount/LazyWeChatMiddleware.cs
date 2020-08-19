@@ -36,7 +36,9 @@ namespace LazyWeChat.OfficialAccount
             _logger = logger;
             _options = options;
             _onMessageReceived = onMessageReceived;
-            _messageQueue = (IMessageQueue)Activator.CreateInstance(implementation);
+            _messageQueue = (IMessageQueue)Activator.CreateInstance(
+                implementation,
+                _options.Value.MQConnectionString);
         }
 
         public async Task InvokeAsync(HttpContext context)

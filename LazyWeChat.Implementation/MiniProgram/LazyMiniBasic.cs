@@ -54,13 +54,6 @@ namespace LazyWeChat.Implementation.MiniProgram
 
         public async Task<string> GetAccessTokenAsync() => await _lazyWeChatBasic.GetAccessTokenAsync();
 
-        /// <summary>
-        /// 根据微信小程序平台提供的解密算法解密数据
-        /// </summary>
-        /// <param name="encryptedData">加密数据</param>
-        /// <param name="iv">初始向量</param>
-        /// <param name="sessionKey">从服务端获取的SessionKey</param>
-        /// <returns></returns>
         public string Decrypt(string encryptedData, string iv, string sessionKey)
         {
             //创建解密器生成工具实例

@@ -36,7 +36,9 @@ namespace LazyWeChat.WeChatPay
             _lazyBasicPayV2 = lazyBasicPayV2;
             _options = options;
             _onGetProductInfo = onGetProductInfo;
-            _messageQueue = (IMessageQueue)Activator.CreateInstance(implementation);
+            _messageQueue = (IMessageQueue)Activator.CreateInstance(
+                implementation,
+                _options.Value.MQConnectionString);
         }
 
         public async Task InvokeAsync(HttpContext context)
