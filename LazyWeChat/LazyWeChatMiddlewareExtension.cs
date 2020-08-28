@@ -2,6 +2,7 @@
 using LazyWeChat.Abstract.OfficialAccount;
 using LazyWeChat.Models;
 using LazyWeChat.OfficialAccount;
+using LazyWeChat.QY;
 using LazyWeChat.Utility;
 using LazyWeChat.WeChatPay;
 using Microsoft.AspNetCore.Builder;
@@ -63,6 +64,36 @@ namespace LazyWeChat
                 throw new ArgumentNullException(nameof(_onGetProductInfo));
 
             return app.UseMiddleware<NativeNotifyMiddleware>(_onGetProductInfo, typeof(T));
+        }
+
+        /////////////
+        ///
+
+        public static IApplicationBuilder UseLazyQY(this IApplicationBuilder app)
+        {
+            Action<WeChatQYMessager> _onMessageReceived = (message) => { };
+            return app.UseLazyQY(_onMessageReceived);
+        }
+
+        public static IApplicationBuilder UseLazyQY(
+            this IApplicationBuilder app,
+            Action<WeChatQYMessager> onMessageReceived)
+        {
+            Type implementation = UtilRepository.GetImplementation(DEFAULTMESSAGEQUEUE);
+            return app.UseMiddleware<LazyQYMiddleware>(onMessageReceived, implementation);
+        }
+
+        public static IApplicationBuilder UseLazyQY<T>(this IApplicationBuilder app) where T : IMessageQueue
+        {
+            Action<WeChatQYMessager> _onMessageReceived = (message) => { };
+            return app.UseLazyQY<T>(_onMessageReceived);
+        }
+
+        public static IApplicationBuilder UseLazyQY<T>(
+            this IApplicationBuilder app,
+            Action<WeChatQYMessager> onMessageReceived) where T : IMessageQueue
+        {
+            return app.UseMiddleware<LazyQYMiddleware>(onMessageReceived, typeof(T));
         }
     }
 }

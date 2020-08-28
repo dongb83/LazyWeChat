@@ -52,7 +52,12 @@ namespace LazyWeChat.Utility
             foreach (XmlNode xn in nodes)
             {
                 XmlElement xe = (XmlElement)xn;
-                m_values[xe.Name] = xe.InnerText;
+                if (!xe.InnerXml.Replace("<!", "").Contains("<"))
+                    m_values[xe.Name] = xe.InnerText;
+                else
+                {
+                    m_values[xe.Name] = FromXml($"<xml>{xe.InnerXml}</xml>");
+                }
             }
 
             return m_values;

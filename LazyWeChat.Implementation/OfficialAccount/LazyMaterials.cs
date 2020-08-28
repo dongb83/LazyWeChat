@@ -57,17 +57,17 @@ namespace LazyWeChat.Implementation.OfficialAccount
         async Task<dynamic> SendRequest(dynamic requestObject, string requestUrl, HttpMethod method, params string[] validationNames)
         {
             var accessToken = await _lazyWeChatBasic.GetAccessTokenAsync();
-            return await _httpRepository.SendRequest(requestObject, requestUrl, method, accessToken, validationNames);
+            return await _httpRepository.SendRequestAsync(requestObject, requestUrl, method, accessToken, validationNames);
         }
 
         #region 新增素材
-        public async Task<dynamic> UploadTempMaterialAsync(string fullFilePath, MediaType mediaType)
+        public virtual async Task<dynamic> UploadTempMaterialAsync(string fullFilePath, MediaType mediaType)
             => await RequestUploadAPI(fullFilePath, CONSTANT.UPLOADTEMPMATERIALURL, mediaType);
 
-        public async Task<dynamic> UploadMaterialAsync(string fullFilePath, MediaType mediaType)
+        public virtual async Task<dynamic> UploadMaterialAsync(string fullFilePath, MediaType mediaType)
             => await RequestUploadAPI(fullFilePath, CONSTANT.UPLOADMATERIALURL, mediaType, "media");
 
-        public async Task<dynamic> UploadMaterialAsync(string fullFilePath, string title, string introduction)
+        public virtual async Task<dynamic> UploadMaterialAsync(string fullFilePath, string title, string introduction)
         {
             dynamic requestObject = new ExpandoObject();
             requestObject.title = title;
@@ -77,17 +77,17 @@ namespace LazyWeChat.Implementation.OfficialAccount
             return res;
         }
 
-        public async Task<dynamic> UploadImgMaterialAsync(string fullImgFilePath)
+        public virtual async Task<dynamic> UploadImgMaterialAsync(string fullImgFilePath)
         {
             var accessToken = await _lazyWeChatBasic.GetAccessTokenAsync();
             var url = string.Format(CONSTANT.UPLOADIMGURL, accessToken);
-            var returnJson = await _httpRepository.UploadFile(url, fullImgFilePath);
+            var returnJson = await _httpRepository.UploadFileAsync(url, fullImgFilePath);
             var returnObject = UtilRepository.ParseAPIResult(returnJson);
             _httpRepository.Validate(returnObject, "url");
             return returnObject;
         }
 
-        public async Task<dynamic> CreateNewsMaterialAsync(List<ArticleModel> articles)
+        public virtual async Task<dynamic> CreateNewsMaterialAsync(List<ArticleModel> articles)
         {
             dynamic requestObject = new ExpandoObject();
             requestObject.articles = articles;
@@ -102,7 +102,7 @@ namespace LazyWeChat.Implementation.OfficialAccount
             string fullFilePath, string requestAPIUrl, MediaType mediaType, string formName = "file", string additionInfo = "")
         {
             string requestUrl = await ValidateMaterial(fullFilePath, requestAPIUrl, mediaType);
-            var returnJson = await _httpRepository.UploadFile(requestUrl, fullFilePath, formName, additionInfo);
+            var returnJson = await _httpRepository.UploadFileAsync(requestUrl, fullFilePath, formName, additionInfo);
             var returnObject = UtilRepository.ParseAPIResult(returnJson);
             return returnObject;
         }
@@ -177,7 +177,7 @@ namespace LazyWeChat.Implementation.OfficialAccount
         #endregion
 
         #region 获取素材
-        public async Task<object> GetTempMaterialAsync(string media_id)
+        public virtual async Task<object> GetTempMaterialAsync(string media_id)
         {
             var access_token = await _lazyWeChatBasic.GetAccessTokenAsync();
             var url = string.Format(CONSTANT.GETTEMPMATERIALURL, access_token, media_id);
@@ -194,7 +194,7 @@ namespace LazyWeChat.Implementation.OfficialAccount
             }
         }
 
-        public async Task<dynamic> GetMaterialsAsync(string type, int offset, int count)
+        public virtual async Task<dynamic> GetMaterialsAsync(string type, int offset, int count)
         {
             dynamic requestObject = new ExpandoObject();
             requestObject.type = type;
@@ -205,7 +205,7 @@ namespace LazyWeChat.Implementation.OfficialAccount
             return returnObject;
         }
 
-        public async Task<object> GetMaterialAsync(string media_id)
+        public virtual async Task<object> GetMaterialAsync(string media_id)
         {
             dynamic requestObject = new ExpandoObject();
             requestObject.media_id = media_id;
@@ -226,7 +226,7 @@ namespace LazyWeChat.Implementation.OfficialAccount
             }
         }
 
-        public async Task<dynamic> GetMaterialsCountAsync()
+        public virtual async Task<dynamic> GetMaterialsCountAsync()
         {
             var returnObject = await SendRequest("", CONSTANT.GETMATERTIALCOUNTURL, HttpMethod.Get,
                 "voice_count", "video_count", "image_count", "news_count");
@@ -236,7 +236,7 @@ namespace LazyWeChat.Implementation.OfficialAccount
 
         #region 修改、删除素材
 
-        public async Task<dynamic> EditMaterialAsync(string media_id, int index, ArticleModel article)
+        public virtual async Task<dynamic> EditMaterialAsync(string media_id, int index, ArticleModel article)
         {
             dynamic requestObject = new ExpandoObject();
             requestObject.media_id = media_id;
@@ -247,7 +247,7 @@ namespace LazyWeChat.Implementation.OfficialAccount
             return returnObject;
         }
 
-        public async Task<dynamic> DeleteMaterialAsync(string media_id)
+        public virtual async Task<dynamic> DeleteMaterialAsync(string media_id)
         {
             dynamic requestObject = new ExpandoObject();
             requestObject.media_id = media_id;

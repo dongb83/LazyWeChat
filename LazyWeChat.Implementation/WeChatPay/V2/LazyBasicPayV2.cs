@@ -19,6 +19,8 @@ namespace LazyWeChat.Implementation.WeChatPay.V2
         public const string MICROPAYURL = "https://api.mch.weixin.qq.com/pay/micropay";
 
         public const string ORDERQUERYURL = "https://api.mch.weixin.qq.com/pay/orderquery";
+
+        public const string ORDERCLOSEURL = "https://api.mch.weixin.qq.com/pay/closeorder";
     }
 
     public partial class LazyBasicPayV2 : ILazyBasicPayV2
@@ -37,14 +39,14 @@ namespace LazyWeChat.Implementation.WeChatPay.V2
             _options = options;
         }
 
-        public async Task<dynamic> UnifiedOrderAsync(UnifiedOrderModel unifiedOrderModel)
+        public virtual async Task<dynamic> UnifiedOrderAsync(UnifiedOrderModel unifiedOrderModel)
         {
             var xml = unifiedOrderModel.XML;
             var response = await _httpRepository.PostParseValidateAsync(CONSTANT.UNIFIEDORDERURL, xml, "prepay_id");
             return response;
         }
 
-        public async Task<string> GetJsApiScriptAsync(string out_trade_no, string body, double total_fee, string openid, string notify_url)
+        public virtual async Task<string> GetJsApiScriptAsync(string out_trade_no, string body, double total_fee, string openid, string notify_url)
         {
             JsApiModel jsApiModel = new JsApiModel(_options.Value);
             var unifiedOrderModel = new UnifiedOrderModel(_options.Value);
@@ -90,7 +92,7 @@ namespace LazyWeChat.Implementation.WeChatPay.V2
             return script;
         }
 
-        public string ToNotifyUrl(HttpContext httpContext)
+        public virtual string ToNotifyUrl(HttpContext httpContext)
         {
             var httpRequest = httpContext.Request;
             return new StringBuilder()
@@ -108,9 +110,9 @@ namespace LazyWeChat.Implementation.WeChatPay.V2
             return model.URL;
         }
 
-        public byte[] GetPrePayQRCode(string out_trade_no) => _qrGenerator.Generate(GetPrePayUrl(out_trade_no));
+        public virtual byte[] GetPrePayQRCode(string out_trade_no) => _qrGenerator.Generate(GetPrePayUrl(out_trade_no));
 
-        public async Task<string> GetPayUrl(string out_trade_no, string body, double total_fee, string notify_url)
+        public virtual async Task<string> GetPayUrl(string out_trade_no, string body, double total_fee, string notify_url)
         {
             var unifiedOrderModel = new UnifiedOrderModel(_options.Value);
             unifiedOrderModel.out_trade_no = out_trade_no;
@@ -133,9 +135,9 @@ namespace LazyWeChat.Implementation.WeChatPay.V2
             return url;
         }
 
-        public async Task<byte[]> GetPayQRCodeAsync(string out_trade_no, string body, double total_fee, string notify_url) => _qrGenerator.Generate(await GetPayUrl(out_trade_no, body, total_fee, notify_url));
+        public virtual async Task<byte[]> GetPayQRCodeAsync(string out_trade_no, string body, double total_fee, string notify_url) => _qrGenerator.Generate(await GetPayUrl(out_trade_no, body, total_fee, notify_url));
 
-        public async Task<dynamic> RunMicroPayAsync(string out_trade_no, string body, double total_fee, string auth_code)
+        public virtual async Task<dynamic> RunMicroPayAsync(string out_trade_no, string body, double total_fee, string auth_code)
         {
             MicroPayModel microPayModel = new MicroPayModel(_options.Value);
             microPayModel.out_trade_no = out_trade_no;
@@ -148,7 +150,7 @@ namespace LazyWeChat.Implementation.WeChatPay.V2
             return returnObject;
         }
 
-        public async Task<dynamic> RunH5PayAsync(H5PayModel h5PayModel)
+        public virtual async Task<dynamic> RunH5PayAsync(H5PayModel h5PayModel)
         {
             var unifiedOrderModel = new UnifiedOrderModel(_options.Value);
             unifiedOrderModel.out_trade_no = h5PayModel.out_trade_no;
@@ -164,7 +166,7 @@ namespace LazyWeChat.Implementation.WeChatPay.V2
             return unifiedOrderResult;
         }
 
-        public async Task<dynamic> RunMiniPayAsync(string out_trade_no, string openid, string body, double total_fee, string spbill_create_ip, string notify_url)
+        public virtual async Task<dynamic> RunMiniPayAsync(string out_trade_no, string openid, string body, double total_fee, string spbill_create_ip, string notify_url)
         {
             var unifiedOrderModel = new UnifiedOrderModel(_options.Value);
             unifiedOrderModel.out_trade_no = out_trade_no;

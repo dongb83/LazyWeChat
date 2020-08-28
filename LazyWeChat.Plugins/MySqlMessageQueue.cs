@@ -1,30 +1,32 @@
 ﻿using LazyWeChat.Abstract;
-using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
+using MySql.Data.MySqlClient;
+using System;
+using System.Collections.Generic;
 using System.Data;
-using System.Data.SqlClient;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace LazyWeChat.Plugins
 {
-    public class SqlServerMessageQueue : IMessageQueue
+    public class MySqlMessageQueue : IMessageQueue
     {
         private readonly string _connectionString;
         private static readonly object thisLock = new object();
 
-        public SqlServerMessageQueue(string connectionString)
+        public MySqlMessageQueue(string connectionString)
         {
             _connectionString = connectionString;
         }
 
         public async Task<string> Pop()
         {
-            using (var conn = new SqlConnection(_connectionString))
+            using (var conn = new MySqlConnection(_connectionString))
             {
                 if (conn.State == ConnectionState.Closed)
                     conn.Open();
 
                 var commandText = "select top 1 * from records where status = 1 order by createdAt desc";
-                var command = new SqlCommand(commandText, conn);
+                var command = new MySqlCommand(commandText, conn);
                 var reader = await command.ExecuteReaderAsync();
                 var id = "";
                 var message = "";
@@ -34,7 +36,7 @@ namespace LazyWeChat.Plugins
                     message = reader["messageObject"].ToString();
                 }
                 commandText = "update records set status = 0 where id = @id";
-                command = new SqlCommand(commandText, conn);
+                command = new MySqlCommand(commandText, conn);
                 command.Parameters.AddWithValue("id", id);
                 _ = command.ExecuteNonQueryAsync();
                 return message;
@@ -43,13 +45,13 @@ namespace LazyWeChat.Plugins
 
         public async Task Push(string item)
         {
-            using (var conn = new SqlConnection(_connectionString))
+            using (var conn = new MySqlConnection(_connectionString))
             {
                 if (conn.State == ConnectionState.Closed)
                     conn.Open();
 
-                var commandText = "insert into records(messageObject)values(@messageObject)";
-                var command = new SqlCommand(commandText, conn);
+                var commandText = "insert into records(id, messageObject, createdAt, status)values(uuid(), @messageObject, now(), 1)";
+                var command = new MySqlCommand(commandText, conn);
                 command.Parameters.AddWithValue("messageObject", item);
 
                 _ = await command.ExecuteNonQueryAsync();

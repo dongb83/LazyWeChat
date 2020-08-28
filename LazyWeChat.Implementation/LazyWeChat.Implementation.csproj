@@ -3,7 +3,13 @@
 		<TargetFramework>netstandard2.0</TargetFramework>
 		<SignAssembly>true</SignAssembly>
 		<AssemblyOriginatorKeyFile>LazyWeChat.pfx</AssemblyOriginatorKeyFile>
-		<Version>0.0.6</Version>
+		<Version>0.1.1</Version>
+		<Authors>bo.dong</Authors>
+		<Description>LazyWeChat的接口实现类</Description>
+		<PackageProjectUrl>https://github.com/dongb83/LazyWeChat</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/dongb83/LazyWeChat/wiki</RepositoryUrl>
+		<PackageTags>weixin,netcore</PackageTags>
+		<PackageIcon>logo.png</PackageIcon>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -16,5 +22,12 @@
 		<ProjectReference Include="..\LazyWeChat.Abstract\LazyWeChat.Abstract.csproj" />
 		<ProjectReference Include="..\LazyWeChat.Models\LazyWeChat.Models.csproj" />
 		<ProjectReference Include="..\LazyWeChat.Utility\LazyWeChat.Utility.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Include="..\logo.png">
+	    <Pack>True</Pack>
+	    <PackagePath></PackagePath>
+	  </None>
 	</ItemGroup>
 </Project>

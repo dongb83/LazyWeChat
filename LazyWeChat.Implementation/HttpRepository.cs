@@ -28,7 +28,7 @@ namespace LazyWeChat.Implementation
             _logger = logger;
         }
 
-        public async Task<string> GetAsync(string url)
+        public virtual async Task<string> GetAsync(string url)
         {
             dynamic resultObject = new ExpandoObject();
             resultObject.requestID = UtilRepository.GenerateRandomCode();
@@ -62,7 +62,7 @@ namespace LazyWeChat.Implementation
             }
         }
 
-        public async Task<string> PostAsync(string url, string requestContent)
+        public virtual async Task<string> PostAsync(string url, string requestContent)
         {
             dynamic resultObject = new ExpandoObject();
             resultObject.requestID = UtilRepository.GenerateRandomCode();
@@ -101,9 +101,9 @@ namespace LazyWeChat.Implementation
             }
         }
 
-        public async Task<dynamic> GetParseAsync(string url) => Pasre(await GetAsync(url));
+        public virtual async Task<dynamic> GetParseAsync(string url) => Pasre(await GetAsync(url));
 
-        public async Task<dynamic> PostParseAsync(string url, string requestContent) => Pasre(await PostAsync(url, requestContent));
+        public virtual async Task<dynamic> PostParseAsync(string url, string requestContent) => Pasre(await PostAsync(url, requestContent));
 
         private dynamic Pasre(string content)
         {
@@ -116,21 +116,21 @@ namespace LazyWeChat.Implementation
             return returnObject;
         }
 
-        public async Task<dynamic> GetParseValidateAsync(string url, params string[] validationNames)
+        public virtual async Task<dynamic> GetParseValidateAsync(string url, params string[] validationNames)
         {
             var returnObject = await GetParseAsync(url);
             Validate(returnObject, validationNames);
             return returnObject;
         }
 
-        public async Task<dynamic> PostParseValidateAsync(string url, string requestContent, params string[] validationNames)
+        public virtual async Task<dynamic> PostParseValidateAsync(string url, string requestContent, params string[] validationNames)
         {
             var returnObject = await PostParseAsync(url, requestContent);
             Validate(returnObject, validationNames);
             return returnObject;
         }
 
-        public void Validate(dynamic returnObj, params string[] validationNames)
+        public virtual void Validate(dynamic returnObj, params string[] validationNames)
         {
             if (validationNames.Length == 0)
             {
@@ -160,7 +160,7 @@ namespace LazyWeChat.Implementation
             });
         }
 
-        public async Task<dynamic> SendRequest(dynamic requestObject, string requestUrl, HttpMethod method, string accessToken, params string[] validationNames)
+        public virtual async Task<dynamic> SendRequestAsync(dynamic requestObject, string requestUrl, HttpMethod method, string accessToken, params string[] validationNames)
         {
             var requestJson = requestObject == null ? "" : JsonConvert.SerializeObject(requestObject);
             var url = string.Format(requestUrl, accessToken);
@@ -202,11 +202,11 @@ namespace LazyWeChat.Implementation
             }
         }
 
-        public async Task<string> UploadFile(string requestUrl, string fileName) => await Task<string>.Run(() => HttpUploadFile(requestUrl, fileName));
+        public virtual async Task<string> UploadFileAsync(string requestUrl, string fileName) => await Task<string>.Run(() => HttpUploadFile(requestUrl, fileName));
 
-        public async Task<string> UploadFile(string requestUrl, string fileName, string formName) => await Task<string>.Run(() => HttpUploadFile(requestUrl, fileName, formName));
+        public virtual async Task<string> UploadFileAsync(string requestUrl, string fileName, string formName) => await Task<string>.Run(() => HttpUploadFile(requestUrl, fileName, formName));
 
-        public async Task<string> UploadFile(string requestUrl, string fileName, string formName, string additionInfo) => await Task<string>.Run(() => HttpUploadFile(requestUrl, fileName, formName, additionInfo));
+        public virtual async Task<string> UploadFileAsync(string requestUrl, string fileName, string formName, string additionInfo) => await Task<string>.Run(() => HttpUploadFile(requestUrl, fileName, formName, additionInfo));
 
         string HttpUploadFile(string url, string path, string formName = "file", string additionInfo = "")
         {

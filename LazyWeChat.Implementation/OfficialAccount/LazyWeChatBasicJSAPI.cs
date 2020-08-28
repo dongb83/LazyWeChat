@@ -20,7 +20,7 @@ namespace LazyWeChat.Implementation.OfficialAccount
         private string _jsTicket;
         private DateTime _expireJSTicket;
 
-        public async Task<string> GenerateWXConfigScriptAsync(
+        public virtual async Task<string> GenerateWXConfigScriptAsync(
             HttpContext context,
             bool debug,
             params string[] jsApiList)
@@ -61,7 +61,7 @@ namespace LazyWeChat.Implementation.OfficialAccount
             return script;
         }
 
-        public async Task<string> GenerateWXConfigScriptAsync(
+        public virtual async Task<string> GenerateWXConfigScriptAsync(
             string requestUrl,
             bool debug,
             params string[] jsApiList)
@@ -103,7 +103,7 @@ namespace LazyWeChat.Implementation.OfficialAccount
 
         #region GetJSTicket
 
-        public async Task<string> GetJSTicketAsync()
+        public virtual async Task<string> GetJSTicketAsync()
         {
             if (!CheckJSTicket)
             {

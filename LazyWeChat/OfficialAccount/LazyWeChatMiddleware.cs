@@ -49,7 +49,7 @@ namespace LazyWeChat.OfficialAccount
             {
                 bool validation = Validate(out string signature, out string timestamp, out string nonce, out string echostr);
 
-                var info = "signature:{0},timestamp:{1},nonce:{2}，echostr:{3} received from wechat at {4}";
+                var info = "signature:{0},timestamp:{1},nonce:{2},echostr:{3} received from wechat at {4}";
                 _logger.LogInformation(info, signature, timestamp, nonce, echostr, DateTime.Now);
 
                 var weChatMessager = new WeChatMessager
@@ -174,13 +174,12 @@ namespace LazyWeChat.OfficialAccount
                 dynamic messageBody = new ExpandoObject();
                 if (inputContent.StartsWith("<") && inputContent.EndsWith(">"))
                 {
-                    messageBody = inputContent.FromXml().ToDynamic();
+                    messageBody = UtilRepository.ParseAPIResult(JsonConvert.SerializeObject(inputContent.FromXml()));
                     format = MessageFormat.Xml;
                 }
                 else if (inputContent.StartsWith("{") && inputContent.EndsWith("}"))
                 {
-                    var dict = JsonConvert.DeserializeObject<Dictionary<string, object>>(inputContent);
-                    messageBody = dict.ToDynamic();
+                    messageBody = UtilRepository.ParseAPIResult(inputContent);
                     format = MessageFormat.Json;
                 }
                 else

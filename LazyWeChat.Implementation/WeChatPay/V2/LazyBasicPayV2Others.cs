@@ -6,7 +6,7 @@ namespace LazyWeChat.Implementation.WeChatPay.V2
 {
     public partial class LazyBasicPayV2 : ILazyBasicPayV2
     {
-        public async Task<dynamic> OrderQueryAsync(string transaction_id, string out_trade_no)
+        public virtual async Task<dynamic> OrderQueryAsync(string transaction_id, string out_trade_no)
         {
             OrderQueryModel orderQueryModel = new OrderQueryModel(_options.Value);
 
@@ -17,6 +17,16 @@ namespace LazyWeChat.Implementation.WeChatPay.V2
 
             var requestXml = orderQueryModel.Xml;
             var returnObject = await _httpRepository.PostParseValidateAsync(CONSTANT.ORDERQUERYURL, requestXml);
+            return returnObject;
+        }
+
+        public virtual async Task<dynamic> CloseOrderAsync(string out_trade_no)
+        {
+            OrderQueryModel closeOrderModel = new OrderQueryModel(_options.Value);
+            closeOrderModel.out_trade_no = out_trade_no;
+
+            var requestXml = closeOrderModel.Xml;
+            var returnObject = await _httpRepository.PostParseValidateAsync(CONSTANT.ORDERCLOSEURL, requestXml);
             return returnObject;
         }
     }

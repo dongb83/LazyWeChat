@@ -16,7 +16,7 @@ namespace LazyWeChat.Implementation.OfficialAccount
 
     public partial class LazyWeChatBasic : ILazyWeChatBasic
     {
-        public async Task<dynamic> CreateMenuAsync(MenuButton menuButton)
+        public virtual async Task<dynamic> CreateMenuAsync(MenuButton menuButton)
         {
             var access_token = await GetAccessTokenAsync();
             string requestUrl = string.Format(CONSTANT.CREATEMENUURL, access_token);
@@ -25,13 +25,13 @@ namespace LazyWeChat.Implementation.OfficialAccount
             return returnObject;
         }
 
-        public async Task<dynamic> GetCurrentMenuAsync()
+        public virtual async Task<dynamic> GetCurrentMenuAsync()
         {
             var returnObject = await SendRequest(null, CONSTANT.GETCURRENTMENUURL, HttpMethod.Get, "is_menu_open");
             return returnObject;
         }
 
-        public async Task<dynamic> DeleteMenuAsync()
+        public virtual async Task<dynamic> DeleteMenuAsync()
         {
             var returnObject = await SendRequest(null, CONSTANT.DELETEMENUURL, HttpMethod.Get);
             return returnObject;

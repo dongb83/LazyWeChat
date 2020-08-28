@@ -31,7 +31,7 @@ namespace LazyWeChat.Implementation.WeChatPay
             _logger = logger;
         }
 
-        public async Task<string> GenerateJsApiOrder()
+        public virtual async Task<string> GenerateJsApiOrder()
         {
             JsApiOrderModel jsApiOrderModel = new JsApiOrderModel();
 			jsApiOrderModel.out_trade_no = "1217752501201407033233368018";

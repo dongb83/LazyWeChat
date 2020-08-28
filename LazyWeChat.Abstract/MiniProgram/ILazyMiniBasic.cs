@@ -7,6 +7,14 @@ using System.Threading.Tasks;
 
 namespace LazyWeChat.Abstract.MiniProgram
 {
+    public enum ParameterType
+    {
+        member_count,
+        room_limit,
+        path,
+        version_type,
+    }
+
     public interface ILazyMiniBasic
     {
         /// <summary>
@@ -21,6 +29,22 @@ namespace LazyWeChat.Abstract.MiniProgram
         /// <param name="js_code">通过 wx.login 接口获得临时登录凭证</param>
         /// <returns></returns>
         Task<dynamic> Code2SessionAsync(string js_code);
+
+        /// <summary>
+        /// 通过微信支付订单号获取unionid
+        /// </summary>
+        /// <param name="openid">openid</param>
+        /// <param name="transaction_id">微信支付订单</param>
+        /// <returns></returns>
+        Task<dynamic> getPaidUnionIdwtTransactionIdAsync(string openid, string transaction_id);
+
+        /// <summary>
+        /// 通过微信支付商户订单号获取unionid
+        /// </summary>
+        /// <param name="openid">openid</param>
+        /// <param name="out_trade_no">微信支付商户订单号</param>
+        /// <returns></returns>
+        Task<dynamic> getPaidUnionIdwtOutTradeNoAsync(string openid, string out_trade_no);
 
         /// <summary>
         /// 获取客服消息内的临时素材
@@ -118,5 +142,28 @@ namespace LazyWeChat.Abstract.MiniProgram
         /// <param name="message">消息内容</param>
         /// <returns></returns>
         Task<dynamic> SendSubscribeMessageAsync(SubscribeMessage message);
+
+        /// <summary>
+        /// 创建动态消息需要的activity_id
+        /// </summary>
+        /// <returns></returns>
+        Task<dynamic> CreateActivityIdAsync();
+
+        /// <summary>
+        /// 修改被分享的动态消息
+        /// </summary>
+        /// <param name="activity_id">动态消息的 ID</param>
+        /// <param name="target_state">动态消息修改后的状态</param>
+        /// <param name="parameters">模板中需要修改的参数列表</param>
+        /// <returns></returns>
+        Task<dynamic> SetUpdatableMsgAsync(string activity_id, int target_state, Dictionary<ParameterType, string> parameters);
+
+        /// <summary>
+        /// 生成小程序二维码
+        /// </summary>
+        /// <param name="path">扫码进入的小程序页面路径</param>
+        /// <param name="width">二维码的宽度</param>
+        /// <returns></returns>
+        Task<byte[]> CreateQRCodeAsync(string path, int width);
     }
 }

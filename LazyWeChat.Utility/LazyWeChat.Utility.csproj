@@ -4,13 +4,26 @@
 		<TargetFramework>netstandard2.0</TargetFramework>
 		<SignAssembly>true</SignAssembly>
 		<AssemblyOriginatorKeyFile>LazyWeChat.pfx</AssemblyOriginatorKeyFile>
-		<Version>0.0.6</Version>
+		<Version>0.1.1</Version>
+		<Authors>bo.dong</Authors>
+		<PackageProjectUrl>https://github.com/dongb83/LazyWeChat</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/dongb83/LazyWeChat/wiki</RepositoryUrl>
+		<PackageTags>weixin,netcore</PackageTags>
+		<Copyright>bo.dong</Copyright>
+		<PackageIcon>logo.png</PackageIcon>
 	</PropertyGroup>
 
 	<ItemGroup>
 		<PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
 		<PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
 		<PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Include="..\logo.png">
+	    <Pack>True</Pack>
+	    <PackagePath></PackagePath>
+	  </None>
 	</ItemGroup>
 
 </Project>

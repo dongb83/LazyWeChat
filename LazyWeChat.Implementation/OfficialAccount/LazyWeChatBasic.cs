@@ -25,7 +25,7 @@ namespace LazyWeChat.Implementation.OfficialAccount
 
         public const string VALIDATEWEBACCESSTOKENURL = "https://api.weixin.qq.com/sns/auth?access_token={0}&openid={1}";
 
-        public const string AUTHORIZATIONURL = "https://open.weixin.qq.com/connect/oauth2/authorize?appid={0}&redirect_uri={1}&response_type=code&scope={2}&state=STATE#wechat_redirect ";
+        public const string AUTHORIZATIONURL = "https://open.weixin.qq.com/connect/oauth2/authorize?appid={0}&redirect_uri={1}&response_type=code&scope={2}&state=STATE#wechat_redirect";
 
         public const string GETUSERINFOURL = " https://api.weixin.qq.com/sns/userinfo?access_token={0}&openid={1}&lang={2}";
 
@@ -61,12 +61,12 @@ namespace LazyWeChat.Implementation.OfficialAccount
         async Task<dynamic> SendRequest(dynamic requestObject, string requestUrl, HttpMethod method, params string[] validationNames)
         {
             var accessToken = await GetAccessTokenAsync();
-            return await _httpRepository.SendRequest(requestObject, requestUrl, method, accessToken, validationNames);
+            return await _httpRepository.SendRequestAsync(requestObject, requestUrl, method, accessToken, validationNames);
         }
 
         #region GetAccessToken
 
-        public string GetAuthorizationCode(HttpContext context, SCOPE scope = SCOPE.snsapi_userinfo)
+        public virtual string GetAuthorizationCode(HttpContext context, SCOPE scope = SCOPE.snsapi_userinfo)
         {
             if (!context.Request.Query.Keys.Contains("code"))
             {
@@ -85,7 +85,7 @@ namespace LazyWeChat.Implementation.OfficialAccount
             return code;
         }
 
-        public async Task<string> GetAccessTokenAsync()
+        public virtual async Task<string> GetAccessTokenAsync()
         {
             if (!CheckAccessToken)
             {
@@ -112,19 +112,19 @@ namespace LazyWeChat.Implementation.OfficialAccount
         #endregion
 
         #region GetWebAccessToken
-        public async Task<dynamic> GetWebAccessTokenAsync(string code)
+        public virtual async Task<dynamic> GetWebAccessTokenAsync(string code)
         {
             var url = string.Format(CONSTANT.WEBACCESSTOKENURL, _options.Value.AppID, _options.Value.AppSecret, code);
             return await _httpRepository.GetParseValidateAsync(url, "openid");
         }
 
-        public async Task<dynamic> RefreshWebAccessTokenAsync(string refresh_token)
+        public virtual async Task<dynamic> RefreshWebAccessTokenAsync(string refresh_token)
         {
             var url = string.Format(CONSTANT.REFRESHWEBACCESSTOKENURL, _options.Value.AppID, refresh_token);
             return await _httpRepository.GetParseValidateAsync(url, "openid");
         }
 
-        public async Task<bool> ValidateWebAccessTokenAsync(string access_token, string openid)
+        public virtual async Task<bool> ValidateWebAccessTokenAsync(string access_token, string openid)
         {
             var url = string.Format(CONSTANT.VALIDATEWEBACCESSTOKENURL, access_token, openid);
 
@@ -142,7 +142,7 @@ namespace LazyWeChat.Implementation.OfficialAccount
 
         #region GetUserInfo
 
-        public async Task<dynamic> GetUserInfoAsync(string access_token, string openid, string lang = "zh_CN")
+        public virtual async Task<dynamic> GetUserInfoAsync(string access_token, string openid, string lang = "zh_CN")
         {
             var url = string.Format(CONSTANT.GETUSERINFOURL, access_token, openid, lang);
             return await _httpRepository.GetParseValidateAsync(url, "openid");
@@ -150,9 +150,9 @@ namespace LazyWeChat.Implementation.OfficialAccount
         #endregion
 
         #region GetIPList
-        public async Task<List<string>> GetWeChatCallbackIPListAsync() => await GetIPListAsync(CONSTANT.IPLISTURL);
+        public virtual async Task<List<string>> GetWeChatCallbackIPListAsync() => await GetIPListAsync(CONSTANT.IPLISTURL);
 
-        public async Task<List<string>> GetWeChatAPIIPListAsync() => await GetIPListAsync(CONSTANT.APIIPLISTURL);
+        public virtual async Task<List<string>> GetWeChatAPIIPListAsync() => await GetIPListAsync(CONSTANT.APIIPLISTURL);
 
         private async Task<List<string>> GetIPListAsync(string apiAddr)
         {
@@ -193,7 +193,7 @@ namespace LazyWeChat.Implementation.OfficialAccount
             return returnObject;
         }
 
-        public async Task<string> GenerateQRCodeAsync<T>(bool tempOrNot, int expire_seconds, T scene_value)
+        public virtual async Task<string> GenerateQRCodeAsync<T>(bool tempOrNot, int expire_seconds, T scene_value)
         {
             var ticketObject = await GenerateQRCodeTicketAsync(tempOrNot, expire_seconds, scene_value);
 
@@ -203,7 +203,7 @@ namespace LazyWeChat.Implementation.OfficialAccount
             return url;
         }
 
-        public async Task<string> ShortUrlAsync(string long_url)
+        public virtual async Task<string> ShortUrlAsync(string long_url)
         {
             dynamic requestObject = new ExpandoObject();
             requestObject.long_url = long_url;

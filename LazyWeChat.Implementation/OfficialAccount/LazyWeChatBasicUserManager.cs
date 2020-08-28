@@ -42,7 +42,7 @@ namespace LazyWeChat.Implementation.OfficialAccount
 
     public partial class LazyWeChatBasic : ILazyWeChatBasic
     {
-        public async Task<dynamic> CreateTagAsync(string tagName)
+        public virtual async Task<dynamic> CreateTagAsync(string tagName)
         {
             dynamic requestObject = new ExpandoObject();
             requestObject.tag = new ExpandoObject();
@@ -52,13 +52,13 @@ namespace LazyWeChat.Implementation.OfficialAccount
             return returnObject;
         }
 
-        public async Task<dynamic> GetTagsAsync()
+        public virtual async Task<dynamic> GetTagsAsync()
         {
             var returnObject = await SendRequest(null, CONSTANT.GETTAGSURL, HttpMethod.Get, "tags");
             return returnObject;
         }
 
-        public async Task<dynamic> EditTagAsync(string tagId, string tagName)
+        public virtual async Task<dynamic> EditTagAsync(string tagId, string tagName)
         {
             dynamic requestObject = new ExpandoObject();
             requestObject.tag = new ExpandoObject();
@@ -69,7 +69,7 @@ namespace LazyWeChat.Implementation.OfficialAccount
             return returnObject;
         }
 
-        public async Task<dynamic> DeleteTagAsync(string tagId)
+        public virtual async Task<dynamic> DeleteTagAsync(string tagId)
         {
             dynamic requestObject = new ExpandoObject();
             requestObject.tag = new ExpandoObject();
@@ -79,7 +79,7 @@ namespace LazyWeChat.Implementation.OfficialAccount
             return returnObject;
         }
 
-        public async Task<dynamic> GetTagUsersAsync(string tagId, string next_openid)
+        public virtual async Task<dynamic> GetTagUsersAsync(string tagId, string next_openid)
         {
             dynamic requestObject = new ExpandoObject();
             requestObject.tagid = tagId;
@@ -89,7 +89,7 @@ namespace LazyWeChat.Implementation.OfficialAccount
             return returnObject;
         }
 
-        public async Task<dynamic> SetTagforUsersAsync(string tagId, params string[] openids)
+        public virtual async Task<dynamic> SetTagforUsersAsync(string tagId, params string[] openids)
         {
             dynamic requestObject = new ExpandoObject();
             requestObject.openid_list = openids;
@@ -99,7 +99,7 @@ namespace LazyWeChat.Implementation.OfficialAccount
             return returnObject;
         }
 
-        public async Task<dynamic> RemoveTagforUsersAsync(string tagId, params string[] openids)
+        public virtual async Task<dynamic> RemoveTagforUsersAsync(string tagId, params string[] openids)
         {
             dynamic requestObject = new ExpandoObject();
             requestObject.openid_list = openids;
@@ -109,7 +109,7 @@ namespace LazyWeChat.Implementation.OfficialAccount
             return returnObject;
         }
 
-        public async Task<dynamic> GetUserTagsAsync(string openid)
+        public virtual async Task<dynamic> GetUserTagsAsync(string openid)
         {
             dynamic requestObject = new ExpandoObject();
             requestObject.openid = openid;
@@ -118,7 +118,7 @@ namespace LazyWeChat.Implementation.OfficialAccount
             return returnObject;
         }
 
-        public async Task<dynamic> SetCommentsforUsersAsync(string remark, string openid)
+        public virtual async Task<dynamic> SetCommentsforUsersAsync(string remark, string openid)
         {
             dynamic requestObject = new ExpandoObject();
             requestObject.openid = openid;
@@ -128,7 +128,7 @@ namespace LazyWeChat.Implementation.OfficialAccount
             return returnObject;
         }
 
-        public async Task<dynamic> GetUserDetailsAsync(string openid, string lang)
+        public virtual async Task<dynamic> GetUserDetailsAsync(string openid, string lang)
         {
             var access_token = await GetAccessTokenAsync();
             string requestUrl = string.Format(CONSTANT.GETUSERDETAILSURL, access_token, openid, lang);
@@ -137,7 +137,7 @@ namespace LazyWeChat.Implementation.OfficialAccount
             return returnObject;
         }
 
-        public async Task<dynamic> GetUsersDetailsAsync(List<(string, string)> user_list)
+        public virtual async Task<dynamic> GetUsersDetailsAsync(List<(string, string)> user_list)
         {
             var access_token = await GetAccessTokenAsync();
             string requestUrl = string.Format(CONSTANT.GETUSERSDETAILSURL, access_token);
@@ -155,7 +155,7 @@ namespace LazyWeChat.Implementation.OfficialAccount
             return returnObject;
         }
 
-        public async Task<dynamic> GetUserListAsync(string next_openid)
+        public virtual async Task<dynamic> GetUserListAsync(string next_openid)
         {
             var access_token = await GetAccessTokenAsync();
             string requestUrl = string.Format(CONSTANT.GETUSERLISTURL, access_token, next_openid);
@@ -164,7 +164,7 @@ namespace LazyWeChat.Implementation.OfficialAccount
             return returnObject;
         }
 
-        public async Task<dynamic> GetBlacklistAsync(string begin_openid)
+        public virtual async Task<dynamic> GetBlacklistAsync(string begin_openid)
         {
             dynamic requestObject = new ExpandoObject();
             requestObject.begin_openid = begin_openid;
@@ -173,7 +173,7 @@ namespace LazyWeChat.Implementation.OfficialAccount
             return returnObject;
         }
 
-        public async Task<dynamic> SetBlackUsersAsync(params string[] openid_list)
+        public virtual async Task<dynamic> SetBlackUsersAsync(params string[] openid_list)
         {
             dynamic requestObject = new ExpandoObject();
             requestObject.openid_list = openid_list;
@@ -182,7 +182,7 @@ namespace LazyWeChat.Implementation.OfficialAccount
             return returnObject;
         }
 
-        public async Task<dynamic> CancelBlackUsersAsync(params string[] openid_list)
+        public virtual async Task<dynamic> CancelBlackUsersAsync(params string[] openid_list)
         {
             dynamic requestObject = new ExpandoObject();
             requestObject.openid_list = openid_list;

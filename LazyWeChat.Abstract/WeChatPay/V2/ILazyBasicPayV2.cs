@@ -71,6 +71,13 @@ namespace LazyWeChat.Abstract.WeChatPay.V2
         /// <returns></returns>
         Task<dynamic> OrderQueryAsync(string transaction_id, string out_trade_no);
 
+        /// <summary>
+        /// 关闭订单
+        /// </summary>
+        /// <param name="out_trade_no">商户订单号</param>
+        /// <returns></returns>
+        Task<dynamic> CloseOrderAsync(string out_trade_no);
+
         string ToNotifyUrl(HttpContext httpContext);
     }
 

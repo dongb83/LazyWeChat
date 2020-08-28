@@ -32,23 +32,23 @@ namespace LazyWeChat.Implementation.MiniProgram
         async Task<dynamic> SendRequest(dynamic requestObject, string requestUrl, HttpMethod method, params string[] validationNames)
         {
             var accessToken = await _lazyWeChatBasic.GetAccessTokenAsync();
-            return await _httpRepository.SendRequest(requestObject, requestUrl, method, accessToken, validationNames);
+            return await _httpRepository.SendRequestAsync(requestObject, requestUrl, method, accessToken, validationNames);
         }
 
-        public async Task<dynamic> AddTemplateAsync(string tid, string sceneDesc, params string[] kidList) =>
+        public virtual async Task<dynamic> AddTemplateAsync(string tid, string sceneDesc, params string[] kidList) =>
             await SendRequest(new { tid = tid, sceneDesc = sceneDesc, kidList = kidList }, CONSTANT.ADDTEMPLATEURL, HttpMethod.Post);
 
-        public async Task<dynamic> DeleteTemplateAsync(string priTmplId) => await SendRequest(new { priTmplId = priTmplId }, CONSTANT.DELETETEMPLATEURL, HttpMethod.Post);
+        public virtual async Task<dynamic> DeleteTemplateAsync(string priTmplId) => await SendRequest(new { priTmplId = priTmplId }, CONSTANT.DELETETEMPLATEURL, HttpMethod.Post);
 
-        public async Task<dynamic> GetCategoryAsync() => await SendRequest("", CONSTANT.GETCATEGORYURL, HttpMethod.Get);
+        public virtual async Task<dynamic> GetCategoryAsync() => await SendRequest("", CONSTANT.GETCATEGORYURL, HttpMethod.Get);
 
-        public async Task<dynamic> GetPubTemplateKeyWordsByIdAsync(string tid) => await SendRequest(new { tid = tid }, CONSTANT.GETPUBTEMPLATETITLELISTURL, HttpMethod.Get);
+        public virtual async Task<dynamic> GetPubTemplateKeyWordsByIdAsync(string tid) => await SendRequest(new { tid = tid }, CONSTANT.GETPUBTEMPLATETITLELISTURL, HttpMethod.Get);
 
-        public async Task<dynamic> GetPubTemplateTitleListAsync(string ids, int start, int limit) => await SendRequest(new { ids = ids, start = start, limit = limit }, CONSTANT.GETPUBTEMPLATETITLELISTURL, HttpMethod.Get);
+        public virtual async Task<dynamic> GetPubTemplateTitleListAsync(string ids, int start, int limit) => await SendRequest(new { ids = ids, start = start, limit = limit }, CONSTANT.GETPUBTEMPLATETITLELISTURL, HttpMethod.Get);
 
-        public async Task<dynamic> GetTemplateListAsync() => await SendRequest("", CONSTANT.GETTEMPLATELISTURL, HttpMethod.Get);
+        public virtual async Task<dynamic> GetTemplateListAsync() => await SendRequest("", CONSTANT.GETTEMPLATELISTURL, HttpMethod.Get);
 
-        public async Task<dynamic> SendSubscribeMessageAsync(SubscribeMessage message)
+        public virtual async Task<dynamic> SendSubscribeMessageAsync(SubscribeMessage message)
         {
             if (message.miniprogram_state == null)
                 message.miniprogram_state = MiniprogramState.formal.ToString();

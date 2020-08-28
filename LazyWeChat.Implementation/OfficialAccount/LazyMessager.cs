@@ -46,7 +46,7 @@ namespace LazyWeChat.Implementation.OfficialAccount
 
         #region Send
 
-        public async Task<dynamic> SendKFMessageAsync(WeChatKFTextMessage text)
+        public virtual async Task<dynamic> SendKFMessageAsync(WeChatKFTextMessage text)
         {
             var requestJson = "";
             if (!string.IsNullOrEmpty(text.customservice.kf_account))
@@ -64,23 +64,23 @@ namespace LazyWeChat.Implementation.OfficialAccount
             return returnObject;
         }
 
-        public async Task<dynamic> SendKFMessageAsync(WeChatKFImageMessage image) => await Send(image);
+        public virtual async Task<dynamic> SendKFMessageAsync(WeChatKFImageMessage image) => await Send(image);
 
-        public async Task<dynamic> SendKFMessageAsync(WeChatKFVoiceMessage voice) => await Send(voice);
+        public virtual async Task<dynamic> SendKFMessageAsync(WeChatKFVoiceMessage voice) => await Send(voice);
 
-        public async Task<dynamic> SendKFMessageAsync(WeChatKFVideoMessage video) => await Send(video);
+        public virtual async Task<dynamic> SendKFMessageAsync(WeChatKFVideoMessage video) => await Send(video);
 
-        public async Task<dynamic> SendKFMessageAsync(WeChatKFMusicMessage music) => await Send(music);
+        public virtual async Task<dynamic> SendKFMessageAsync(WeChatKFMusicMessage music) => await Send(music);
 
         public async Task<dynamic> SendKFMessageAsync(WeChatKFExternalNewsMessage externalNews) => await Send(externalNews);
 
-        public async Task<dynamic> SendKFMessageAsync(WeChatKFNewsMessage news) => await Send(news);
+        public virtual async Task<dynamic> SendKFMessageAsync(WeChatKFNewsMessage news) => await Send(news);
 
-        public async Task<dynamic> SendKFMessageAsync(WeChatKFMenuMessage menu) => await Send(menu);
+        public virtual async Task<dynamic> SendKFMessageAsync(WeChatKFMenuMessage menu) => await Send(menu);
 
-        public async Task<dynamic> SendKFMessageAsync(WeChatKFMiniMessage mini) => await Send(mini);
+        public virtual async Task<dynamic> SendKFMessageAsync(WeChatKFMiniMessage mini) => await Send(mini);
 
-        public async Task<dynamic> SendKFMessageAsync(WeChatKFCardMessage card) => await Send(card);
+        public virtual async Task<dynamic> SendKFMessageAsync(WeChatKFCardMessage card) => await Send(card);
 
         private async Task<dynamic> Send(string requestJson)
         {
@@ -104,38 +104,38 @@ namespace LazyWeChat.Implementation.OfficialAccount
         }
         #endregion
 
-        public async Task<dynamic> AddKFAccountAsync(string kf_account, string nickname, string password)
+        public virtual async Task<dynamic> AddKFAccountAsync(string kf_account, string nickname, string password)
         {
             var requestObject = new { kf_account = kf_account, nickname = nickname, password = password };
             var res = await SendRequest(requestObject, CONSTANT.ADDKFACCOUNTURL, HttpMethod.Post);
             return res;
         }
 
-        public async Task<dynamic> EditKFAccountAsync(string kf_account, string nickname, string password)
+        public virtual async Task<dynamic> EditKFAccountAsync(string kf_account, string nickname, string password)
         {
             var requestObject = new { kf_account = kf_account, nickname = nickname, password = password };
             var res = await SendRequest(requestObject, CONSTANT.EDITKFACCOUNTURL, HttpMethod.Post);
             return res;
         }
 
-        public async Task<dynamic> DeleteKFAccountAsync(string kf_account)
+        public virtual async Task<dynamic> DeleteKFAccountAsync(string kf_account)
         {
             var requestObject = new { kf_account = kf_account };
             var res = await SendRequest(requestObject, CONSTANT.DELETEKFACCOUNTURL, HttpMethod.Post);
             return res;
         }
 
-        public async Task<dynamic> GetKFAccountsAsync()
+        public virtual async Task<dynamic> GetKFAccountsAsync()
         {
             var res = await SendRequest("", CONSTANT.GETKFACCOUNTSURL, HttpMethod.Get, "kf_list");
             return res;
         }
 
-        public async Task<dynamic> UploadKFAvatarAsync(string kf_account, string avatarFilePath)
+        public virtual async Task<dynamic> UploadKFAvatarAsync(string kf_account, string avatarFilePath)
         {
             var access_token = await _lazyWeChatBasic.GetAccessTokenAsync();
             var requestUrl = string.Format(CONSTANT.UPLOADKFAVATARURL, access_token, kf_account);
-            var returnJson = await _httpRepository.UploadFile(requestUrl, avatarFilePath);
+            var returnJson = await _httpRepository.UploadFileAsync(requestUrl, avatarFilePath);
             var returnObject = UtilRepository.ParseAPIResult(returnJson);
             return returnObject;
         }

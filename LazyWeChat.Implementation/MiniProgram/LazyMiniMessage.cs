@@ -24,12 +24,12 @@ namespace LazyWeChat.Implementation.MiniProgram
         private async Task<dynamic> SendKFMessage(MiniKFMessage message) =>
             await SendRequest(message, CONSTANT.SENDKFMESSAGEURL, HttpMethod.Post);
 
-        public async Task<dynamic> SendUniformMessageAsync(MPUniformMessage message) =>
+        public virtual async Task<dynamic> SendUniformMessageAsync(MPUniformMessage message) =>
             await SendRequest(message, CONSTANT.UNIFORMMESSAGEURL, HttpMethod.Post);
 
-        public async Task<dynamic> UploadTempMediaAsync(string fullFilePath) => await _lazyMaterials.UploadTempMaterialAsync(fullFilePath, MediaType.image);
+        public virtual async Task<dynamic> UploadTempMediaAsync(string fullFilePath) => await _lazyMaterials.UploadTempMaterialAsync(fullFilePath, MediaType.image);
 
-        public async Task<byte[]> GetTempMediaAsync(string media_id)
+        public virtual async Task<byte[]> GetTempMediaAsync(string media_id)
         {
             var res = await _lazyMaterials.GetTempMaterialAsync(media_id);
             byte[] byteArray = Encoding.Default.GetBytes(res.ToString());

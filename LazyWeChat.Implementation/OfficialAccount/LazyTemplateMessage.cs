@@ -28,10 +28,10 @@ namespace LazyWeChat.Implementation.OfficialAccount
         async Task<dynamic> SendRequest(dynamic requestObject, string requestUrl, HttpMethod method, params string[] validationNames)
         {
             var accessToken = await _lazyWeChatBasic.GetAccessTokenAsync();
-            return await _httpRepository.SendRequest(requestObject, requestUrl, method, accessToken, validationNames);
+            return await _httpRepository.SendRequestAsync(requestObject, requestUrl, method, accessToken, validationNames);
         }
 
-        public async Task<dynamic> SetIndustryAsync(string industry1, string industry2)
+        public virtual async Task<dynamic> SetIndustryAsync(string industry1, string industry2)
         {
             dynamic requestObject = new ExpandoObject();
             requestObject.industry_id1 = industry1;
@@ -41,7 +41,7 @@ namespace LazyWeChat.Implementation.OfficialAccount
             return returnObject;
         }
 
-        public async Task<dynamic> GetIndustryAsync()
+        public virtual async Task<dynamic> GetIndustryAsync()
         {
             var access_token = await _lazyWeChatBasic.GetAccessTokenAsync();
             var requestUrl = string.Format(CONSTANT.GETINDUSTRYURL, access_token);
@@ -49,7 +49,7 @@ namespace LazyWeChat.Implementation.OfficialAccount
             return returnObject;
         }
 
-        public async Task<dynamic> GetTemplateIDAsync(string template_short_name)
+        public virtual async Task<dynamic> GetTemplateIDAsync(string template_short_name)
         {
             dynamic requestObject = new ExpandoObject();
             requestObject.template_id_short = template_short_name;
@@ -58,13 +58,13 @@ namespace LazyWeChat.Implementation.OfficialAccount
             return returnObject;
         }
 
-        public async Task<dynamic> GetTemplateListAsync()
+        public virtual async Task<dynamic> GetTemplateListAsync()
         {
             var returnObject = await SendRequest(null, CONSTANT.GETTEMPLATELISTURL, HttpMethod.Get, "template_list");
             return returnObject;
         }
 
-        public async Task<dynamic> DeleteTemplateAsync(string template_id)
+        public virtual async Task<dynamic> DeleteTemplateAsync(string template_id)
         {
             dynamic requestObject = new ExpandoObject();
             requestObject.template_id = template_id;
@@ -73,7 +73,7 @@ namespace LazyWeChat.Implementation.OfficialAccount
             return returnObject;
         }
 
-        public async Task<dynamic> SendTemplateMessageAsync(string touser, string template_id, string url, params (string, string, string)[] data)
+        public virtual async Task<dynamic> SendTemplateMessageAsync(string touser, string template_id, string url, params (string, string, string)[] data)
         {
             dynamic requestObject = GenerateTemplateModel(touser, template_id, data);
             requestObject.url = url;
@@ -82,7 +82,7 @@ namespace LazyWeChat.Implementation.OfficialAccount
             return returnObject;
         }
 
-        public async Task<dynamic> SendTemplateMessageAsync(string touser, string template_id, string appid, string pagepath, params (string, string, string)[] data)
+        public virtual async Task<dynamic> SendTemplateMessageAsync(string touser, string template_id, string appid, string pagepath, params (string, string, string)[] data)
         {
             dynamic requestObject = GenerateTemplateModel(touser, template_id, data);
             requestObject.miniprogram = new ExpandoObject();

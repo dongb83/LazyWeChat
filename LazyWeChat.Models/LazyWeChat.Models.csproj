@@ -1,10 +1,16 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>LazyWeChat.pfx</AssemblyOriginatorKeyFile>
-    <Version>0.0.6</Version>
+    <Version>0.1.1</Version>
+    <Authors>bo.dong</Authors>
+    <Copyright>bo.dong</Copyright>
+    <PackageProjectUrl>https://github.com/dongb83/LazyWeChat</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/dongb83/LazyWeChat/wiki</RepositoryUrl>
+    <PackageTags>weixin,netcore</PackageTags>
+    <PackageIcon>logo.png</PackageIcon>
   </PropertyGroup>
 
   <ItemGroup>
@@ -13,6 +19,13 @@
 
   <ItemGroup>
     <ProjectReference Include="..\LazyWeChat.Utility\LazyWeChat.Utility.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\logo.png">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
   </ItemGroup>
 
 </Project>

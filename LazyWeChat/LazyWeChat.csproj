@@ -5,12 +5,18 @@
 		<SignAssembly>true</SignAssembly>
 		<DelaySign>false</DelaySign>
 		<AssemblyOriginatorKeyFile>LazyWeChat.pfx</AssemblyOriginatorKeyFile>
-		<Description>it is light wechat framework</Description>
+		<Description>一个基于.netstandard2.0的微信轻量级框架，支持.net core 3.x。
+It is a light framework for WeChat development base on .netstandard2.0, and support .net core 3.x .</Description>
 		<PackageId>LazyWeChat</PackageId>
 		<GeneratePackageOnBuild>false</GeneratePackageOnBuild>
-		<AssemblyVersion>0.0.6.0</AssemblyVersion>
-		<FileVersion>0.0.6.0</FileVersion>
-		<Version>0.0.6</Version>
+		<AssemblyVersion>0.1.1.0</AssemblyVersion>
+		<FileVersion>0.1.1.0</FileVersion>
+		<Version>0.1.1</Version>
+		<RepositoryUrl>https://github.com/dongb83/LazyWeChat/wiki</RepositoryUrl>
+		<PackageProjectUrl>https://github.com/dongb83/LazyWeChat</PackageProjectUrl>
+		<PackageTags>weixin,netcore</PackageTags>
+		<Authors>bo.dong</Authors>
+		<PackageIcon>logo.png</PackageIcon>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -28,5 +34,12 @@
 		<ProjectReference Include="..\LazyWeChat.Implementation\LazyWeChat.Implementation.csproj" />
 		<ProjectReference Include="..\LazyWeChat.Models\LazyWeChat.Models.csproj" />
 		<ProjectReference Include="..\LazyWeChat.Utility\LazyWeChat.Utility.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Include="..\logo.png">
+	    <Pack>True</Pack>
+	    <PackagePath></PackagePath>
+	  </None>
 	</ItemGroup>
 </Project>

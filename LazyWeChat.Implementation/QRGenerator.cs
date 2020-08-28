@@ -8,7 +8,7 @@ namespace LazyWeChat.Implementation
 {
     public class QRGenerator : IQRGenerator
     {
-        public byte[] Generate(string content)
+        public virtual byte[] Generate(string content)
         {
             QRCodeGenerator qrGenerator = new QRCodeGenerator();
             QRCodeData qrCodeData = qrGenerator.CreateQrCode(content, QRCodeGenerator.ECCLevel.Q);
