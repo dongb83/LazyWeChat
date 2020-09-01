@@ -222,7 +222,7 @@ namespace LazyWeChat.Models
                             messageBody.return_code, messageBody.return_msg);
                 }
                 if (type == APIType.MiniProgram)
-                    _message = _message.Contains("transfer_customer_service") ? _message : "success";
+                    _message = _message.Contains("transfer_customer_service") ? _message : defaultMessage;
                 _message = string.IsNullOrEmpty(_message) ? defaultMessage : _message;
                 return _message;
             }

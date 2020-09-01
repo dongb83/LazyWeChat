@@ -1,6 +1,7 @@
 ﻿using LazyWeChat.Abstract.OfficialAccount;
 using LazyWeChat.Models.OfficialAccount;
 using Microsoft.AspNetCore.Http;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace LazyWeChat.Abstract.QY
@@ -65,7 +66,7 @@ namespace LazyWeChat.Abstract.QY
         /// <param name="mediaType">素材类型</param>
         /// <returns></returns>
         Task<dynamic> UploadTempMaterialAsync(string fullFilePath, MediaType mediaType);
-        
+
         /// <summary>
         /// 上传图文消息内的图片获取URL
         /// </summary>
@@ -79,5 +80,49 @@ namespace LazyWeChat.Abstract.QY
         /// <param name="media_id">media_id</param>
         /// <returns></returns>
         Task<object> GetTempMaterialAsync(string media_id);
+
+        /// <summary>
+        /// 用于生成wx.config的JS脚本
+        /// </summary>
+        /// <param name="requestUrl">需要调用wx.config的JS脚本</param>
+        /// <param name="debug">是否为debug模式</param>
+        /// <param name="jsApiList">需要使用的JS接口列表</param>
+        /// <returns></returns>
+        Task<string> GenerateWXConfigScriptAsync(string requestUrl, bool debug, params string[] jsApiList);
+
+        /// <summary>
+        /// 用于生成wx.config的JS脚本
+        /// </summary>
+        /// <param name="context">HttpContext</param>
+        /// <param name="debug">是否为debug模式</param>
+        /// <param name="jsApiList">需要使用的JS接口列表</param>
+        /// <returns></returns>
+        Task<string> GenerateWXConfigScriptAsync(HttpContext context, bool debug, params string[] jsApiList);
+
+        /// <summary>
+        /// 获取用于获取wx.agentConfig的参数
+        /// </summary>
+        /// <param name="requestUrl">需要调用wx.config的JS脚本</param>
+        /// <returns></returns>
+        Task<Dictionary<string, string>> GetAgentConfigParameters(string requestUrl);
+
+        /// <summary>
+        /// 获取用于获取wx.agentConfig的参数
+        /// </summary>
+        /// <param name="context">HttpContext</param>
+        /// <returns></returns>
+        Task<Dictionary<string, string>> GetAgentConfigParameters(HttpContext context);
+
+        /// <summary>
+        /// 获取用于调用企业微信JS接口的临时票据
+        /// </summary>
+        /// <returns></returns>
+        Task<string> GetJSTicketAsync();
+
+        /// <summary>
+        /// 获取用于注入应用的身份与权限的临时票据
+        /// </summary>
+        /// <returns></returns>
+        Task<string> GetAgentJSTicketAsync();
     }
 }

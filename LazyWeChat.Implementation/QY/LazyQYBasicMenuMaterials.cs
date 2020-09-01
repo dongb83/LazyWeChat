@@ -35,7 +35,7 @@ namespace LazyWeChat.Implementation.QY
         public virtual async Task<dynamic> CreateMenuAsync(MenuButton menuButton)
         {
             var access_token = await GetAccessTokenAsync();
-            string requestUrl = string.Format(CONSTANT.CREATEMENUURL, access_token, _options.Value.AppID);
+            string requestUrl = string.Format(CONSTANT.CREATEMENUURL, access_token, _options.Value.AgentID);
             var requestContent = menuButton.ToJson();
             var returnObject = await _httpRepository.PostParseValidateAsync(requestUrl, requestContent);
             return returnObject;
@@ -44,7 +44,7 @@ namespace LazyWeChat.Implementation.QY
         public virtual async Task<dynamic> GetCurrentMenuAsync()
         {
             var access_token = await GetAccessTokenAsync();
-            string requestUrl = string.Format(CONSTANT.GETCURRENTMENUURL, access_token, _options.Value.AppID);
+            string requestUrl = string.Format(CONSTANT.GETCURRENTMENUURL, access_token, _options.Value.AgentID);
             var returnObject = await _httpRepository.GetParseAsync(requestUrl);
             return returnObject;
         }
@@ -52,7 +52,7 @@ namespace LazyWeChat.Implementation.QY
         public virtual async Task<dynamic> DeleteMenuAsync()
         {
             var access_token = await GetAccessTokenAsync();
-            string requestUrl = string.Format(CONSTANT.DELETEMENUURL, access_token, _options.Value.AppID);
+            string requestUrl = string.Format(CONSTANT.DELETEMENUURL, access_token, _options.Value.AgentID);
             var returnObject = await _httpRepository.GetParseValidateAsync(requestUrl);
             return returnObject;
         }

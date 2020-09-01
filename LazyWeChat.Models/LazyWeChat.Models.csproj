@@ -4,7 +4,7 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>LazyWeChat.pfx</AssemblyOriginatorKeyFile>
-    <Version>0.1.1</Version>
+    <Version>0.1.2</Version>
     <Authors>bo.dong</Authors>
     <Copyright>bo.dong</Copyright>
     <PackageProjectUrl>https://github.com/dongb83/LazyWeChat</PackageProjectUrl>

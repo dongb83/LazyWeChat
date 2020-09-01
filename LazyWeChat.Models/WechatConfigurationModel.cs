@@ -13,7 +13,7 @@ namespace LazyWeChat.Models
     public class LazyWeChatConfiguration
     {
         /// <summary>
-        /// 公众号或者小程序 AppID或者企业微信App的AgentID
+        /// 公众号或者小程序 AppID或者企业微信App的CorpID
         /// </summary>
         public string AppID { get; set; }
 
@@ -28,9 +28,9 @@ namespace LazyWeChat.Models
         public string ContactSecret { get; set; }
 
         /// <summary>
-        /// 企业微信CorpID
+        /// 企业微信 AgentID
         /// </summary>
-        public string CorpID { get; set; }
+        public string AgentID { get; set; }
 
         /// <summary>
         /// 公众号或者小程序 EncodingAESKey

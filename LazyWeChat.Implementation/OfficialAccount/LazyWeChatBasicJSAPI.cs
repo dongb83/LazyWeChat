@@ -23,43 +23,7 @@ namespace LazyWeChat.Implementation.OfficialAccount
         public virtual async Task<string> GenerateWXConfigScriptAsync(
             HttpContext context,
             bool debug,
-            params string[] jsApiList)
-        {
-            if (jsApiList == null || jsApiList.Length == 0)
-            {
-                throw new ArgumentNullException(nameof(jsApiList));
-            }
-
-            string script = @"
-                            wx.config({{
-                                  debug: {0},
-                                  appId: '{1}',
-                                  timestamp: {2},
-                                  nonceStr: '{3}',
-                                  signature: '{4}',
-                                  jsApiList: [
-                                    {5}
-                                  ]
-                              }});
-                            ";
-
-            StringBuilder api = new StringBuilder();
-            jsApiList.ToList().ForEach(i => api.Append($"'{i}',"));
-            var apiList = api.ToString();
-
-            var appId = _options.Value.AppID;
-            var noncestr = _options.Value.NonceStr;
-            var timestamp = _options.Value.Timestamp;
-            var requestUrl = context.Request.ToAbsoluteUri();
-            var jsTicket = await GetJSTicketAsync();
-
-            var signature = UtilRepository.GenerateSignature(noncestr, timestamp, requestUrl, jsTicket, out string outString);
-
-            _logger.LogInformation($"noncestr:{noncestr},timestamp:{timestamp},requestUrl:{requestUrl},jsTicket:{jsTicket},signature:{signature},outString:{outString}");
-
-            script = string.Format(script, debug.ToString().ToLower(), appId, timestamp, noncestr, signature, apiList.Substring(0, apiList.Length - 1));
-            return script;
-        }
+            params string[] jsApiList) => await GenerateWXConfigScriptAsync(context.Request.ToAbsoluteUri(), debug, jsApiList);
 
         public virtual async Task<string> GenerateWXConfigScriptAsync(
             string requestUrl,
