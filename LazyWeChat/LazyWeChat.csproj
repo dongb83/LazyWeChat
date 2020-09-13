@@ -9,9 +9,9 @@
 It is a light framework for WeChat development base on .netstandard2.0, and support .net core 3.x .</Description>
 		<PackageId>LazyWeChat</PackageId>
 		<GeneratePackageOnBuild>false</GeneratePackageOnBuild>
-		<AssemblyVersion>0.1.2.0</AssemblyVersion>
-		<FileVersion>0.1.2.0</FileVersion>
-		<Version>0.1.2</Version>
+		<AssemblyVersion>0.1.3.0</AssemblyVersion>
+		<FileVersion>0.1.3.0</FileVersion>
+		<Version>0.1.3</Version>
 		<RepositoryUrl>https://github.com/dongb83/LazyWeChat/wiki</RepositoryUrl>
 		<PackageProjectUrl>https://github.com/dongb83/LazyWeChat</PackageProjectUrl>
 		<PackageTags>weixin,netcore</PackageTags>

@@ -30,11 +30,28 @@ namespace LazyWeChat.Abstract.OfficialAccount
         string GetAuthorizationCode(HttpContext context, SCOPE scope);
 
         /// <summary>
+        /// 微信开放平台获取授权code
+        /// </summary>
+        /// <param name="context">HttpContext</param>
+        /// <param name="openAppID">开发平台应用中的AppID</param>
+        /// <returns>授权code</returns>
+        string GetQRConnectCode(HttpContext context, string openAppID);
+
+        /// <summary>
         /// 获取用来换取用户相关微信信息的网页授权access_token
         /// </summary>
         /// <param name="code">调用GetAuthorizationCode获得的code</param>
         /// <returns></returns>
         Task<dynamic> GetWebAccessTokenAsync(string code);
+
+        /// <summary>
+        /// 开放平台获取用来换取用户相关微信信息的网页授权access_token
+        /// </summary>
+        /// <param name="code">调用GetAuthorizationCode获得的code</param>
+        /// <param name="openAppID">开发平台应用中的AppID</param>
+        /// <param name="openAppSecret">开发平台应用中的AppSecret</param>
+        /// <returns></returns>
+        Task<dynamic> GetOpenWebAccessTokenAsync(string code, string openAppID, string openAppSecret);
 
         /// <summary>
         /// 用来检验授权凭证（access_token）是否有效

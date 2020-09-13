@@ -306,11 +306,11 @@ namespace LazyWeChat.Models
         {
             get => (items) =>
              {
-                 if (messageBody.msgType == "text" ||
-                     messageBody.msgType == "image" ||
-                     messageBody.msgType == "voice" ||
-                     messageBody.msgType == "video" ||
-                     messageBody.msgType == "location")
+                 if (messageBody.MsgType == "text" ||
+                     messageBody.MsgType == "image" ||
+                     messageBody.MsgType == "voice" ||
+                     messageBody.MsgType == "video" ||
+                     messageBody.MsgType == "location")
                  {
                      if (items.Count > 1)
                          throw new ArgumentOutOfRangeException("articleCount should be 1 when message type is 'text' or 'image' or 'voice' or 'video' or 'location'");
@@ -325,6 +325,7 @@ namespace LazyWeChat.Models
                         messageBody.FromUserName,
                         messageBody.ToUserName,
                         UtilRepository.GetUTCTicks(),
+                        items.Count,
                         articles);
              };
         }

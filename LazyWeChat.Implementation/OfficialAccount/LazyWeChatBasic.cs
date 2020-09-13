@@ -27,6 +27,9 @@ namespace LazyWeChat.Implementation.OfficialAccount
 
         public const string AUTHORIZATIONURL = "https://open.weixin.qq.com/connect/oauth2/authorize?appid={0}&redirect_uri={1}&response_type=code&scope={2}&state=STATE#wechat_redirect";
 
+
+        public const string QRCONNECTIONURL = "https://open.weixin.qq.com/connect/qrconnect?appid={0}&redirect_uri={1}&response_type=code&scope=snsapi_login&state={2}#wechat_redirect";
+
         public const string GETUSERINFOURL = " https://api.weixin.qq.com/sns/userinfo?access_token={0}&openid={1}&lang={2}";
 
         public const string IPLISTURL = "https://api.weixin.qq.com/cgi-bin/getcallbackip?access_token={0}";
@@ -85,6 +88,27 @@ namespace LazyWeChat.Implementation.OfficialAccount
             return code;
         }
 
+        public virtual string GetQRConnectCode(HttpContext context, string openAppID)
+        {
+            if (!context.Request.Query.Keys.Contains("code"))
+            {
+                Random random = new Random();
+                var state = random.Next(1000, 9999);
+                var redirectUrl = context.Request.ToAbsoluteUri();
+                var url = string.Format(CONSTANT.QRCONNECTIONURL,
+                    openAppID,
+                    redirectUrl,
+                    state);
+
+                _logger.LogInformation("redirect url is :'{0}'", url);
+
+                context.Response.Redirect(url);
+            }
+            var code = context.Request.Query["code"].ToString();
+            _logger.LogInformation("code for authorization :'{0}'", code);
+            return code;
+        }
+
         public virtual async Task<string> GetAccessTokenAsync()
         {
             if (!CheckAccessToken)
@@ -98,7 +122,7 @@ namespace LazyWeChat.Implementation.OfficialAccount
         {
             var url = string.Format(CONSTANT.ACCESSTOKENURL,
                 _options.Value.AppID,
-                _options.Value.AppSecret);
+                 _options.Value.AppSecret);
 
             var returnObj = await _httpRepository.GetParseValidateAsync(url, "access_token");
 
@@ -115,6 +139,12 @@ namespace LazyWeChat.Implementation.OfficialAccount
         public virtual async Task<dynamic> GetWebAccessTokenAsync(string code)
         {
             var url = string.Format(CONSTANT.WEBACCESSTOKENURL, _options.Value.AppID, _options.Value.AppSecret, code);
+            return await _httpRepository.GetParseValidateAsync(url, "openid");
+        }
+
+        public virtual async Task<dynamic> GetOpenWebAccessTokenAsync(string code, string openAppID, string openAppSecret)
+        {
+            var url = string.Format(CONSTANT.WEBACCESSTOKENURL, openAppID, openAppSecret, code);
             return await _httpRepository.GetParseValidateAsync(url, "openid");
         }
 
@@ -169,7 +199,7 @@ namespace LazyWeChat.Implementation.OfficialAccount
         #region Account Management
         async Task<dynamic> GenerateQRCodeTicketAsync<T>(bool tempOrNot, int expire_seconds, T scene_value)
         {
-            if (!(typeof(T) == typeof(int)|| typeof(T) == typeof(string)))
+            if (!(typeof(T) == typeof(int) || typeof(T) == typeof(string)))
                 throw new InvalidCastException(nameof(scene_value));
 
             dynamic requestObject = new ExpandoObject();
